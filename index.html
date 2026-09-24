@@ -12,13 +12,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   
   <style>
-    /* ================================================= Tokens Mabelcox / Torii Clean */
+    /* ================================================= Tokens Mabelcox / Precision Flat */
     :root {
       --bg: #05070a;
+      --bg-gradient: radial-gradient(circle at 50% 0%, #0d111a 0%, #05070a 75%);
       --text: #f2ede4;
       --text-muted: #807d8a;
       --border: rgba(242, 237, 228, 0.12);
       --hover-bg: rgba(242, 237, 228, 0.05);
+      --row-bg: #07090e;
       --pill-bg: rgba(255, 255, 255, 0.05);
       --pill-border: rgba(255, 255, 255, 0.14);
       --pill-hover-bg: rgba(255, 255, 255, 0.12);
@@ -29,10 +31,12 @@
 
     [data-theme="light"] {
       --bg: #faf7f2;
+      --bg-gradient: radial-gradient(circle at 50% 0%, #ffffff 0%, #f3eee5 85%);
       --text: #17181c;
       --text-muted: #72747d;
       --border: rgba(0, 0, 0, 0.08);
       --hover-bg: rgba(0, 0, 0, 0.03);
+      --row-bg: #ffffff;
       --pill-bg: rgba(0, 0, 0, 0.04);
       --pill-border: rgba(0, 0, 0, 0.1);
       --pill-hover-bg: rgba(0, 0, 0, 0.08);
@@ -44,8 +48,11 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     html, body {
+      min-height: 100%;
       height: 100%;
-      background-color: var(--bg);
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--text);
       font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
       font-size: 15px;
@@ -54,25 +61,7 @@
       overflow-x: hidden;
     }
 
-    /* Fondo Torii 3D Canvas */
-    #gl {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.85;
-      transition: opacity 0.3s ease;
-    }
-    [data-theme="light"] #gl {
-      opacity: 0.2;
-      filter: invert(1) hue-rotate(180deg);
-    }
-
     .page {
-      position: relative;
-      z-index: 10;
       min-height: 100%;
       display: flex;
       flex-direction: column;
@@ -86,16 +75,8 @@
     .top-bar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       margin-bottom: 64px;
-    }
-
-    .brand-title {
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      text-decoration: none;
     }
 
     /* Control Pill Canónico Mabelcox */
@@ -162,11 +143,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 20px;
-      background: var(--bg);
+      padding: 18px 22px;
+      background: var(--row-bg);
       text-decoration: none;
       color: var(--text);
-      transition: background-color 0.15s ease, transform 0.15s ease;
+      transition: background-color 0.15s ease;
     }
 
     .tool-row:hover {
@@ -236,15 +217,10 @@
 </head>
 <body>
 
-  <!-- WebGL Torii 3D Limpio -->
-  <canvas id="gl"></canvas>
-
   <div class="page">
     
     <!-- Top Bar con Control Pill Canónico -->
     <header class="top-bar">
-      <a href="https://dakesu.net" class="brand-title" data-i18n="site_name">Dakesu Tools</a>
-
       <!-- Pill Switch Canónico (Mabelcox) -->
       <div class="control-pill" role="toolbar" aria-label="Preferencias de visualización">
         <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
@@ -369,86 +345,6 @@
     </footer>
 
   </div>
-
-  <!-- Torii 3D Script Canónico (Three.js WebGL) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script>
-    (function initToriiBackground() {
-      const canvas = document.getElementById('gl');
-      if (!canvas || typeof THREE === 'undefined') return;
-
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-      renderer.setSize(window.innerWidth, window.innerHeight);
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-      camera.position.set(0, 1.2, 5.5);
-
-      // Luz cálida y suave
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-      scene.add(ambientLight);
-
-      const dirLight = new THREE.DirectionalLight(0xe83424, 1.2);
-      dirLight.position.set(2, 4, 3);
-      scene.add(dirLight);
-
-      // Geometría estilizada y minimalista de Torii
-      const toriiGroup = new THREE.Group();
-      const woodMaterial = new THREE.MeshStandardMaterial({
-        color: 0x1a1c23,
-        roughness: 0.6,
-        metalness: 0.1
-      });
-
-      // Postes verticales
-      const postGeo = new THREE.CylinderGeometry(0.08, 0.09, 3.2, 16);
-      const postLeft = new THREE.Mesh(postGeo, woodMaterial);
-      postLeft.position.set(-1.2, 0.4, 0);
-      postLeft.rotation.z = -0.02;
-
-      const postRight = new THREE.Mesh(postGeo, woodMaterial);
-      postRight.position.set(1.2, 0.4, 0);
-      postRight.rotation.z = 0.02;
-
-      // Viga superior curva (Kasagi)
-      const topBeamGeo = new THREE.BoxGeometry(3.2, 0.14, 0.2);
-      const topBeam = new THREE.Mesh(topBeamGeo, woodMaterial);
-      topBeam.position.set(0, 1.9, 0);
-
-      // Viga transversal (Nuki)
-      const midBeamGeo = new THREE.BoxGeometry(2.7, 0.1, 0.14);
-      const midBeam = new THREE.Mesh(midBeamGeo, woodMaterial);
-      midBeam.position.set(0, 1.45, 0);
-
-      toriiGroup.add(postLeft, postRight, topBeam, midBeam);
-      toriiGroup.position.set(0, -0.6, 0);
-      scene.add(toriiGroup);
-
-      // Niebla sutil
-      scene.fog = new THREE.FogExp2(0x05070a, 0.12);
-
-      let mouseX = 0, mouseY = 0;
-      window.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-      }, { passive: true });
-
-      window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-      });
-
-      function animate() {
-        requestAnimationFrame(animate);
-        toriiGroup.rotation.y = THREE.MathUtils.lerp(toriiGroup.rotation.y, mouseX * 0.15, 0.04);
-        toriiGroup.rotation.x = THREE.MathUtils.lerp(toriiGroup.rotation.x, mouseY * 0.08, 0.04);
-        renderer.render(scene, camera);
-      }
-      animate();
-    })();
-  </script>
 
   <script src="/shared/i18n.js"></script>
 </body>
