@@ -35,9 +35,10 @@ const i18nData = {
     an_male: "Masculino",
     an_female: "Femenino",
     an_fantasy: "Fantasía / Soberano",
-    an_mode_random: "Modo Catálogo",
-    an_mode_custom: "Modo Combinatoria",
     an_mode_desc: "Generador 100% libre de servidor y sin consumo de tokens.",
+    an_filter_ph: "Filtrar por significado, tag o elemento (ej. Dragón, Fuego, Loto)...",
+    pwa_install_btn: "Instalar App",
+    pwa_install_title: "Instalar en móvil o escritorio como acceso directo rápido.",
 
     // Reading Speed
     rs_title: "Calculadora de Ritmo de Lectura",
@@ -72,7 +73,7 @@ const i18nData = {
     sg_faction: "Alineación",
     sg_btn: "Generar",
 
-    footer_copy: "© 2026 Dakesu. Utilidades sin registro."
+    footer_copy: "© 2026 Dakesu. Ecosistema de Ficción y Novelas Orientales."
   },
   en: {
     site_title: "Tools · Dakesu",
@@ -106,10 +107,10 @@ const i18nData = {
     an_all: "All",
     an_male: "Male",
     an_female: "Female",
-    an_fantasy: "Fantasy / Sovereign",
-    an_mode_random: "Catalogue Mode",
-    an_mode_custom: "Combinator Mode",
     an_mode_desc: "100% client-side zero-token generation.",
+    an_filter_ph: "Filter by meaning, tag or element (e.g. Dragon, Fire, Lotus)...",
+    pwa_install_btn: "Install App",
+    pwa_install_title: "Install on mobile or desktop as a quick shortcut.",
 
     // Reading Speed
     rs_title: "Reading Speed Calculator",
@@ -144,7 +145,7 @@ const i18nData = {
     sg_faction: "Alignment",
     sg_btn: "Generate",
 
-    footer_copy: "© 2026 Dakesu. Zero-registration utilities."
+    footer_copy: "© 2026 Dakesu. Eastern Fiction & Novel Ecosystem."
   }
 };
 
@@ -233,5 +234,36 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', () => {
       navToolsDropdown.classList.remove('open');
     });
+  }
+
+  // Registrar Service Worker para soporte PWA (Instalar en móvil)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+
+  // Soporte de Instalación Nativa (PWA en Android / iPhone / Escritorio)
+  let deferredPrompt;
+  const pwaInstallBtns = document.querySelectorAll('.pwa-install-btn');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    pwaInstallBtns.forEach(btn => {
+      btn.style.display = 'inline-flex';
+      btn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          pwaInstallBtns.forEach(b => b.style.display = 'none');
+        }
+        deferredPrompt = null;
+      });
+    });
+  });
+
+  // Si ya está instalada o en standalone
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+    pwaInstallBtns.forEach(b => b.style.display = 'none');
   }
 });

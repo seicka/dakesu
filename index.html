@@ -6,6 +6,26 @@
   <title>Dakesu Tools</title>
   <meta name="description" content="Herramientas y utilidades rápidas para fanáticos de novelas asiáticas.">
   <link rel="canonical" href="https://tools.dakesu.net/">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#05070a">
+  <link rel="apple-touch-icon" href="/icon.svg">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Dakesu Tools",
+    "url": "https://tools.dakesu.net/",
+    "description": "Suite de herramientas y utilidades libres de registro para aficionados a novelas ligeras y ficción oriental.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +36,7 @@
     :root {
       --bg: #05070a;
       --bg-gradient: radial-gradient(circle at 50% 0%, #0d111a 0%, #05070a 75%);
+      --grid-color: rgba(242, 237, 228, 0.05);
       --text: #f2ede4;
       --text-muted: #807d8a;
       --border: rgba(242, 237, 228, 0.12);
@@ -32,6 +53,7 @@
     [data-theme="light"] {
       --bg: #faf7f2;
       --bg-gradient: radial-gradient(circle at 50% 0%, #ffffff 0%, #f3eee5 85%);
+      --grid-color: rgba(0, 0, 0, 0.04);
       --text: #17181c;
       --text-muted: #72747d;
       --border: rgba(0, 0, 0, 0.08);
@@ -59,9 +81,27 @@
       -webkit-font-smoothing: antialiased;
       transition: background-color 0.25s ease, color 0.25s ease;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Grilla Técnica Elegante con Desvanecimiento Radial Central (Mabelcox) */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+      mask-image: radial-gradient(circle at 50% 35%, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 85%);
+      -webkit-mask-image: radial-gradient(circle at 50% 35%, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 85%);
     }
 
     .page {
+      position: relative;
+      z-index: 10;
       min-height: 100%;
       display: flex;
       flex-direction: column;
@@ -71,12 +111,35 @@
       padding: 32px 24px;
     }
 
-    /* Top Bar Simple */
+    /* Top Bar con PWA Install y Pill */
     .top-bar {
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      gap: 10px;
       margin-bottom: 64px;
+    }
+
+    .pwa-install-btn {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      cursor: pointer;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: all 0.15s ease;
+    }
+    .pwa-install-btn:hover {
+      background: var(--pill-hover-bg);
+      border-color: var(--text-muted);
     }
 
     /* Control Pill Canónico Mabelcox */
@@ -221,6 +284,16 @@
     
     <!-- Top Bar con Control Pill Canónico -->
     <header class="top-bar">
+      <!-- Botón de Instalación PWA (Android / iOS / Desktop) -->
+      <button id="pwaInstallBtn" class="pwa-install-btn" title="Instalar aplicación en dispositivo" aria-label="Instalar app">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        <span data-i18n="pwa_install_btn">Instalar App</span>
+      </button>
+
       <!-- Pill Switch Canónico (Mabelcox) -->
       <div class="control-pill" role="toolbar" aria-label="Preferencias de visualización">
         <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
@@ -337,7 +410,7 @@
 
     <!-- Footer Simple -->
     <footer class="footer">
-      <span data-i18n="footer_copy">&copy; 2026 Dakesu. Utilidades sin registro.</span>
+      <span data-i18n="footer_copy">© 2026 Dakesu. Ecosistema de Ficción y Novelas Orientales.</span>
       <div style="display:flex; gap:16px;">
         <a href="https://dakesu.net" data-i18n="nav_novels">Novelas</a>
         <a href="https://seicka.net">seicka.net</a>
@@ -346,6 +419,7 @@
 
   </div>
 
+  <script src="/shared/petals.js"></script>
   <script src="/shared/i18n.js"></script>
 </body>
 </html>

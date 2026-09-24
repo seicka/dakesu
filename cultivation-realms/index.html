@@ -6,6 +6,26 @@
   <title>Reinos de Cultivo Xianxia · Dakesu Tools</title>
   <meta name="description" content="Jerarquía canónica de cultivo taoísta: Qi, Fundación, Núcleo Dorado, Alma Naciente y Ascensión celestial.">
   <link rel="canonical" href="https://tools.dakesu.net/cultivation-realms">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#05070a">
+  <link rel="apple-touch-icon" href="/icon.svg">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Reinos de Cultivo Xianxia",
+    "url": "https://tools.dakesu.net/cultivation-realms",
+    "description": "Guía jerárquica de niveles y reinos de cultivo taoísta en novelas Xianxia y Wuxia con términos en Hanzi, Pinyin y habilidades marciales.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,10 +34,12 @@
   <style>
     :root {
       --bg: #05070a;
+      --grid-color: rgba(242, 237, 228, 0.05);
       --text: #f2ede4;
       --text-muted: #807d8a;
       --border: rgba(242, 237, 228, 0.12);
       --hover-bg: rgba(242, 237, 228, 0.05);
+      --card-bg: rgba(14, 17, 26, 0.72);
       --input-bg: #0d1017;
       --pill-bg: rgba(255, 255, 255, 0.05);
       --pill-border: rgba(255, 255, 255, 0.14);
@@ -29,10 +51,12 @@
 
     [data-theme="light"] {
       --bg: #faf7f2;
+      --grid-color: rgba(0, 0, 0, 0.04);
       --text: #17181c;
       --text-muted: #72747d;
       --border: rgba(0, 0, 0, 0.08);
       --hover-bg: rgba(0, 0, 0, 0.03);
+      --card-bg: rgba(255, 255, 255, 0.8);
       --input-bg: #ffffff;
       --pill-bg: rgba(0, 0, 0, 0.04);
       --pill-border: rgba(0, 0, 0, 0.1);
@@ -52,12 +76,57 @@
       font-size: 15px;
       -webkit-font-smoothing: antialiased;
       transition: background-color 0.25s ease, color 0.25s ease;
+      position: relative;
+    }
+
+    /* Grilla Técnica Elegante con Desvanecimiento Radial Central */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+      mask-image: radial-gradient(circle at 50% 35%, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 85%);
+      -webkit-mask-image: radial-gradient(circle at 50% 35%, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.15) 85%);
     }
 
     .page {
+      position: relative;
+      z-index: 10;
       max-width: 760px;
       margin: 0 auto;
       padding: 32px 24px;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pwa-install-btn {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      cursor: pointer;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: all 0.15s ease;
+    }
+    .pwa-install-btn:hover {
+      background: var(--pill-hover-bg);
+      border-color: var(--text-muted);
     }
 
     /* Top Bar */
@@ -329,30 +398,42 @@
         </div>
       </div>
 
-      <!-- Pill Switch Canónico (Mabelcox) -->
-      <div class="control-pill" role="toolbar" aria-label="Preferencias">
-        <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
-          <span id="langToggleLabel">EN</span>
+      <div class="top-right">
+        <!-- Botón PWA Nativo -->
+        <button id="pwaInstallBtn" class="pwa-install-btn" title="Instalar aplicación en dispositivo" aria-label="Instalar app">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span data-i18n="pwa_install_btn">Instalar App</span>
         </button>
 
-        <span class="pill-divider" aria-hidden="true">/</span>
+        <!-- Pill Switch Canónico (Mabelcox) -->
+        <div class="control-pill" role="toolbar" aria-label="Preferencias">
+          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+            <span id="langToggleLabel">EN</span>
+          </button>
 
-        <button id="themeToggle" class="pill-btn pill-btn-icon" aria-label="Cambiar modo de color" title="Cambiar tema">
-          <svg class="sun-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <svg class="moon-icon" style="display:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        </button>
+          <span class="pill-divider" aria-hidden="true">/</span>
+
+          <button id="themeToggle" class="pill-btn pill-btn-icon" aria-label="Cambiar modo de color" title="Cambiar tema">
+            <svg class="sun-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" style="display:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -372,8 +453,15 @@
     <!-- Lista de Reinos -->
     <div id="realmsList" class="realms-list"></div>
 
+    <!-- Footer Canónico -->
+    <footer style="margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted);">
+      <span data-i18n="footer_copy">© 2026 Dakesu. Ecosistema de Ficción y Novelas Orientales.</span>
+      <a href="https://dakesu.net" target="_blank" rel="noopener" style="color: var(--text-muted); text-decoration: none;">dakesu.net</a>
+    </footer>
+
   </div>
 
+  <script src="/shared/petals.js"></script>
   <script src="/shared/i18n.js"></script>
   <script>
     const realms = [
