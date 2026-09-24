@@ -5,6 +5,7 @@ const i18nData = {
   es: {
     site_title: "Herramientas · Dakesu",
     site_name: "Dakesu Tools",
+    nav_home: "Inicio",
     nav_novels: "Novelas",
     nav_tools_menu: "Herramientas",
     
@@ -78,6 +79,7 @@ const i18nData = {
   en: {
     site_title: "Tools · Dakesu",
     site_name: "Dakesu Tools",
+    nav_home: "Home",
     nav_novels: "Novels",
     nav_tools_menu: "Tools",
     
