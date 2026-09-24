@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Nombres Asiáticos | Dakesu Tools</title>
+  <meta name="description" content="Generador gratuito de nombres japoneses, coreanos, chinos (Wuxia/Xianxia) e hindi con kanji, hangul, pinyin y significado etimológico.">
+  <link rel="canonical" href="https://tools.dakesu.net/asian-names">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#3E5CA4',
+              600: '#2E4378',
+              accent: '#E63946'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
+          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
+          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
+        </a>
+        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ asian-names</span>
+      </div>
+      <a href="https://dakesu.net" class="text-xs text-neutral-400 hover:text-white transition-colors">
+        Volver a Novelas
+      </a>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+    
+    <div class="mb-8">
+      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2">
+        Generador de Nombres Asiáticos
+      </h1>
+      <p class="text-neutral-400 text-xs sm:text-sm">
+        Crea identidades verosímiles para personajes de ficción, novelas o avatares con significado original y escritura auténtica.
+      </p>
+    </div>
+
+    <!-- Controles -->
+    <div class="border border-neutral-800 bg-neutral-900/40 p-6 mb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        
+        <div>
+          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Cultura / Sistema</label>
+          <select id="cultureSelect" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 focus:outline-none focus:border-brand-500">
+            <option value="jp">Japonés (Kanji + Furigana)</option>
+            <option value="kr">Coreano (Hangul + Hanja)</option>
+            <option value="cn">Chino Wuxia / Cultivo Taoísta</option>
+            <option value="in">Hindi / Védico (Devanagari)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Arquetipo / Género</label>
+          <select id="genderSelect" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 focus:outline-none focus:border-brand-500">
+            <option value="all">Cualquiera / Místico</option>
+            <option value="male">Masculino / Marcial</option>
+            <option value="female">Femenino / Sereno</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Cantidad</label>
+          <select id="countSelect" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 focus:outline-none focus:border-brand-500">
+            <option value="4">4 nombres</option>
+            <option value="8">8 nombres</option>
+            <option value="12">12 nombres</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button id="generateBtn" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 active:scale-[0.99] text-white text-xs font-medium px-6 py-3 transition-all">
+        Generar Nombres
+      </button>
+    </div>
+
+    <!-- Resultados -->
+    <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+
+    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
+    <div class="mt-12 border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <div>
+        <p class="font-medium text-white mb-1">¿Inspirándote para escribir?</p>
+        <p class="text-neutral-400">Lee traducciones pulidas de cultivation y fantasía asiática en Dakesu.</p>
+      </div>
+      <a href="https://dakesu.net" class="text-brand-500 hover:text-white underline font-mono">
+        dakesu.net/novelas &rarr;
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
+    <p>&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
+  </footer>
+
+  <!-- Lógica 100% Client-Side -->
+  <script>
+    const database = {
+      jp: [
+        { orig: "黒澤 蓮", romaji: "Kurosawa Ren", meaning: "Pantano negro · Loto sagrado", desc: "Arquetipo de cultivador sombrío o samurái taciturno", gender: "male" },
+        { orig: "白石 葵", romaji: "Shiraishi Aoi", meaning: "Piedra blanca · Malva azul", desc: "Pureza, resiliencia y nobleza feudal", gender: "female" },
+        { orig: "神谷 颯太", romaji: "Kamiya Souta", meaning: "Valle divino · Viento repentino", desc: "Portador de técnicas de viento y velocidad", gender: "male" },
+        { orig: "藤堂 桜", romaji: "Toudo Sakura", meaning: "Templo de glicinas · Flor de cerezo", desc: "Linaje de estrategas cortesanos", gender: "female" },
+        { orig: "夜神 零", romaji: "Yagami Rei", meaning: "Dios nocturno · Cero absoluto", desc: "Entidad en el umbral del vacío", gender: "all" },
+        { orig: "月城 悠", romaji: "Tsukishiro Yuu", meaning: "Castillo lunar · Eternidad serena", desc: "Magia espiritual o reinos astrales", gender: "all" }
+      ],
+      kr: [
+        { orig: "강 하진", romaji: "Kang Ha-jin", meaning: "Río fuerte · Verdad del cielo", desc: "Cazador de rango superior o heredero de gremio", gender: "male" },
+        { orig: "서 유나", romaji: "Seo Yu-na", meaning: "Tranquilidad · Gracia radiante", desc: "Sanadora espiritual o diplomática", gender: "female" },
+        { orig: "백 도현", romaji: "Baek Do-hyun", meaning: "Blanco puro · Camino virtuoso", desc: "Espadachín de secta tradicional", gender: "male" },
+        { orig: "윤 채은", romaji: "Yoon Chae-eun", meaning: "Luz de jade · Bondad sincera", desc: "Erudita arcana de torre mágica", gender: "female" },
+        { orig: "신 시우", romaji: "Shin Si-woo", meaning: "Divino · Lluvia a tiempo", desc: "Portador de milagros o despertar divino", gender: "all" }
+      ],
+      cn: [
+        { orig: "叶 辰", romaji: "Ye Chen", meaning: "Hoja caída · Astro celestial", desc: "Clásico protagonista de superación y cultivo taoísta", gender: "male" },
+        { orig: "苏 凌雪", romaji: "Su Lingxue", meaning: "Seda sobria · Nieve en la cumbre", desc: "Hada de hielo o doncella de secta suprema", gender: "female" },
+        { orig: "林 傲天", romaji: "Lin Aotian", meaning: "Bosque profundo · Orgullo desafiante al cielo", desc: "Genio arrogante o némesis de clan", gender: "male" },
+        { orig: "凤 梦华", romaji: "Feng Menghua", meaning: "Fénix primordial · Flor de ensueño", desc: "Reencarnación de linaje místico", gender: "female" },
+        { orig: "无 尘", romaji: "Wu Chen", meaning: "Cero polvo · Mente inmaculada", desc: "Monje guerrero o maestro ermitaño", gender: "all" }
+      ],
+      in: [
+        { orig: "अर्जुन वर्मा", romaji: "Arjun Verma", meaning: "Luminoso / Puro · Armadura protectora", desc: "Arquetipo del arquero invicto y estratega", gender: "male" },
+        { orig: "अनन्या राव", romaji: "Ananya Rao", meaning: "Incomparable · De linaje noble", desc: "Maestra de mantras y oráculos", gender: "female" },
+        { orig: "रुद्र कश्यप", romaji: "Rudra Kashyap", meaning: "El que ruge (manifestación fiera) · Sabio védico", desc: "Guerrero asceta de técnicas elementales de fuego", gender: "male" },
+        { orig: "ईशा नायर", romaji: "Isha Nair", meaning: "Protectora soberana · Líder de clan", desc: "Guardián de templos y reliquias antiguas", gender: "female" }
+      ]
+    };
+
+    function renderNames() {
+      const culture = document.getElementById('cultureSelect').value;
+      const gender = document.getElementById('genderSelect').value;
+      const count = parseInt(document.getElementById('countSelect').value, 10);
+      const grid = document.getElementById('resultsGrid');
+
+      let pool = database[culture] || [];
+      if (gender !== 'all') {
+        const filtered = pool.filter(item => item.gender === gender || item.gender === 'all');
+        if (filtered.length > 0) pool = filtered;
+      }
+
+      // Shuffle y slice
+      const shuffled = [...pool].sort(() => 0.5 - Math.random());
+      const selected = [];
+      while (selected.length < count) {
+        for (let item of shuffled) {
+          if (selected.length < count) selected.push(item);
+        }
+      }
+
+      grid.innerHTML = selected.map(item => `
+        <div class="border border-neutral-800 bg-neutral-900/40 p-5 flex flex-col justify-between hover:border-neutral-700 transition-colors">
+          <div>
+            <div class="flex items-baseline justify-between mb-2">
+              <span class="text-2xl font-serif font-bold text-white tracking-wide">${item.orig}</span>
+              <span class="text-xs font-mono text-brand-500">${item.romaji}</span>
+            </div>
+            <p class="text-xs font-mono text-neutral-400 mb-2">${item.meaning}</p>
+            <p class="text-xs text-neutral-500 leading-relaxed">${item.desc}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-neutral-800/60 flex justify-end">
+            <button onclick="navigator.clipboard.writeText('${item.orig} (${item.romaji})'); this.innerText = '¡Copiado!';" class="text-xs font-mono text-neutral-400 hover:text-white transition-colors">
+              Copiar
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('generateBtn').addEventListener('click', renderNames);
+    document.getElementById('cultureSelect').addEventListener('change', renderNames);
+    document.getElementById('genderSelect').addEventListener('change', renderNames);
+    document.getElementById('countSelect').addEventListener('change', renderNames);
+
+    renderNames();
+  </script>
+
+</body>
+</html>

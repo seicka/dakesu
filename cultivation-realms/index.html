@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reinos y Jerarquías de Cultivo Xianxia | Dakesu Tools</title>
+  <meta name="description" content="Tabla comparativa interactiva de reinos de cultivo taoísta en novelas Xianxia: Condensación de Qi, Establecimiento de Fundación, Núcleo Dorado, Alma Naciente y Ascensión.">
+  <link rel="canonical" href="https://tools.dakesu.net/cultivation-realms">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#3E5CA4',
+              600: '#2E4378',
+              accent: '#E63946'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      font-family: monospace;
+      font-size: 11px;
+    }
+    .pill-btn {
+      color: rgba(255, 255, 255, 0.7);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0 4px;
+      font-weight: 600;
+    }
+    .pill-btn:hover { color: #fff; }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
+          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
+          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
+        </a>
+        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ cultivation-realms</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="control-pill" role="toolbar" aria-label="Selector de idioma">
+          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+            <span id="langToggleLabel">EN</span>
+          </button>
+        </div>
+        <a href="https://dakesu.net/novelas" class="text-xs text-neutral-400 hover:text-white transition-colors" data-i18n="nav_novels">
+          Volver a Novelas
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+    
+    <div class="mb-8">
+      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2" data-i18n="tool3_title">
+        Glosario y Reinos de Cultivo Xianxia
+      </h1>
+      <p class="text-neutral-400 text-xs sm:text-sm" data-i18n="tool3_desc">
+        Tabla comparativa canónica: Condensación de Qi, Establecimiento de Fundación, Núcleo Dorado, Alma Naciente y Ascensión Celestial.
+      </p>
+    </div>
+
+    <!-- Filtros de Sistema -->
+    <div class="flex flex-wrap gap-2 mb-8">
+      <button class="filter-btn active bg-brand-500 text-white text-xs px-4 py-2 font-mono" data-system="all">Todos los Reinos</button>
+      <button class="filter-btn bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-xs px-4 py-2 font-mono" data-system="mortal">Reino Mortal (Capas 1-3)</button>
+      <button class="filter-btn bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-xs px-4 py-2 font-mono" data-system="immortal">Reino Santo / Inmortal (Capas 4-6)</button>
+      <button class="filter-btn bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-xs px-4 py-2 font-mono" data-system="divine">Reino Divino / Dao (Capas 7+)</button>
+    </div>
+
+    <!-- Listado de Reinos en Cards Técnicas -->
+    <div id="realmsContainer" class="space-y-4 mb-12"></div>
+
+    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
+    <div class="border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <div>
+        <p class="font-medium text-white mb-1" data-i18n="banner_title">¿Buscas algo nuevo que leer?</p>
+        <p class="text-neutral-400" data-i18n="banner_desc">Explora novelas de cultivo taoísta en Dakesu.</p>
+      </div>
+      <a href="https://dakesu.net/novelas" class="text-brand-500 hover:text-white underline font-mono shrink-0">
+        dakesu.net/novelas &rarr;
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
+    <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
+  </footer>
+
+  <script src="/shared/i18n.js"></script>
+  <script>
+    const realms = [
+      {
+        id: 1,
+        tier: "mortal",
+        cn: "炼气期",
+        pinyin: "Liàn Qì Qī",
+        es: "Condensación de Qi (1° - 9° Nivel)",
+        en: "Qi Condensation / Qi Gathering",
+        lifespan: "100 - 120 años (Límite humano refinado)",
+        desc: "El cultivador abre sus meridianos y absorbe el Qi espiritual del cielo y la tierra acumulándolo en el Dantian inferior.",
+        feat: "Refuerzo de tendones y huesos, percepción espiritual inicial y manipulación rudimentaria de talismanes."
+      },
+      {
+        id: 2,
+        tier: "mortal",
+        cn: "筑基期",
+        pinyin: "Zhù Jī Qī",
+        es: "Establecimiento de la Fundación",
+        en: "Foundation Establishment",
+        lifespan: "200 - 300 años",
+        desc: "El Qi gaseoso del cultivador se comprime en un mar líquido dentro del Dantian. Se considera el cruce oficial entre mortales e inmortales.",
+        feat: "Vuelo con espadas voladoras (Yujian Shu), liberación de llamas verdaderas del Samadhi e inmunidad a enfermedades mundanas."
+      },
+      {
+        id: 3,
+        tier: "mortal",
+        cn: "金丹期",
+        pinyin: "Jīn Dān Qī",
+        es: "Formación del Núcleo Dorado (Jindan)",
+        en: "Core Formation / Golden Core",
+        lifespan: "500 - 800 años",
+        desc: "El mar líquido se cristaliza a altas presiones en una píldora esférica sólida (Núcleo Dorado). Su calidad (1 a 9 grietas/patrones) define el potencial futuro.",
+        feat: "Dominio de artefactos mágicos de alto nivel, vuelo autónomo sin herramientas y primera manifestación del Sentido Divino a kilómetros."
+      },
+      {
+        id: 4,
+        tier: "immortal",
+        cn: "元婴期",
+        pinyin: "Yuán Yīng Qī",
+        es: "Alma Naciente (Yuanying)",
+        en: "Nascent Soul",
+        lifespan: "1.000 - 2.000 años",
+        desc: "El Núcleo Dorado se fractura y emerge un feto de energía espiritual idéntico al cultivador. Si el cuerpo físico es destruido, el cultivador sobrevive en su Alma Naciente.",
+        feat: "Teletransportación de corta distancia (Teleportación Menor), posesión de cuerpos (Duoshe) y dominio del Qi de los cinco elementos."
+      },
+      {
+        id: 5,
+        tier: "immortal",
+        cn: "化神期",
+        pinyin: "Huà Shén Qī",
+        es: "Transformación Divina / Separación Espiritual",
+        en: "Soul Formation / Deification",
+        lifespan: "3.000 - 5.000 años",
+        desc: "El Alma Naciente se fusiona con las leyes cósmicas. El cultivador comienza a comprender su propio 'Dominio' o 'Territorio de Dao'.",
+        feat: "Control de las leyes del mundo natural, supresión masiva por simple presión espiritual y capacidad de rasgar el espacio."
+      },
+      {
+        id: 6,
+        tier: "immortal",
+        cn: "问鼎期 / 炼虚期",
+        pinyin: "Wèn Dǐng / Liàn Xū",
+        es: "Vacío Espiritual / Purificación del Vacío",
+        en: "Void Refining / Void Tribulation",
+        lifespan: "10.000+ años",
+        desc: "El cultivador refina el vacío para desprenderse de las ataduras de los planos mortales inferiores antes de afrontar las tribulaciones celestiales mayores.",
+        feat: "Creación de dimensiones de bolsillo independientes y comprensión de conceptos de tiempo y espacio."
+      },
+      {
+        id: 7,
+        tier: "divine",
+        cn: "渡劫期 / 大乘期",
+        pinyin: "Dù Jié / Dà Chéng",
+        es: "Tribulación Celestial y Gran Consumación",
+        en: "Tribulation Transcendence / Mahayana",
+        lifespan: "Casi inmortal hasta la siguiente tribulación",
+        desc: "Afronta las 9 Tribulaciones de Rayo Celestial. Si sobrevive, purifica su cuerpo con luz inmortal y asciende al Reino Celestial Superior.",
+        feat: "Resistencia al Trueno Divino, bautismo con Qi Inmortal Primordial y Ascensión Dimensional."
+      }
+    ];
+
+    function renderRealms(tierFilter = "all") {
+      const container = document.getElementById("realmsContainer");
+      const filtered = tierFilter === "all" ? realms : realms.filter(r => r.tier === tierFilter);
+
+      container.innerHTML = filtered.map(r => `
+        <div class="border border-neutral-800 bg-neutral-900/40 p-6 hover:border-neutral-700 transition-colors">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div class="flex items-baseline gap-3">
+              <span class="text-2xl font-serif font-bold text-white">${r.cn}</span>
+              <span class="text-xs font-mono text-brand-500">${r.pinyin}</span>
+            </div>
+            <span class="text-xs font-mono text-neutral-400 bg-neutral-950 border border-neutral-800 px-3 py-1 self-start sm:self-auto">
+              ${r.lifespan}
+            </span>
+          </div>
+
+          <h3 class="text-base font-semibold text-neutral-200 mb-1">
+            ${r.es} <span class="text-xs font-normal text-neutral-500 font-mono">(${r.en})</span>
+          </h3>
+
+          <p class="text-xs text-neutral-400 leading-relaxed mb-3">
+            ${r.desc}
+          </p>
+
+          <div class="bg-neutral-950/60 border border-neutral-800/80 p-3 text-xs text-neutral-500 font-mono">
+            <span class="text-neutral-400 font-bold">Habilidades canónicas:</span> ${r.feat}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => {
+          b.classList.remove("active", "bg-brand-500", "text-white");
+          b.classList.add("bg-neutral-900", "text-neutral-400");
+        });
+        btn.classList.add("active", "bg-brand-500", "text-white");
+        btn.classList.remove("bg-neutral-900", "text-neutral-400");
+        renderRealms(btn.getAttribute("data-system"));
+      });
+    });
+
+    renderRealms();
+  </script>
+</body>
+</html>

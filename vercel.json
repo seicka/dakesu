@@ -1,0 +1,8 @@
+{
+  "name": "dakesu-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mini-apps suite client-side para dakesu.net",
+  "cleanUrls": true,
+  "trailingSlash": false
+}

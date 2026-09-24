@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diccionario de Términos Daoístas y Marciales | Dakesu Tools</title>
+  <meta name="description" content="Glosario rápido con caracteres chinos, pinyin y significado de conceptos wuxia/xianxia: Dantian, Qi, Cara (Mianzi), Alma Naciente y Tribulaciones.">
+  <link rel="canonical" href="https://tools.dakesu.net/daoist-glossary">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#3E5CA4',
+              600: '#2E4378',
+              accent: '#E63946'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      font-family: monospace;
+      font-size: 11px;
+    }
+    .pill-btn {
+      color: rgba(255, 255, 255, 0.7);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0 4px;
+      font-weight: 600;
+    }
+    .pill-btn:hover { color: #fff; }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
+          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
+          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
+        </a>
+        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ daoist-glossary</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="control-pill" role="toolbar" aria-label="Selector de idioma">
+          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+            <span id="langToggleLabel">EN</span>
+          </button>
+        </div>
+        <a href="https://dakesu.net/novelas" class="text-xs text-neutral-400 hover:text-white transition-colors" data-i18n="nav_novels">
+          Volver a Novelas
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+    
+    <div class="mb-8">
+      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2" data-i18n="tool4_title">
+        Diccionario de Términos Daoístas y Marciales
+      </h1>
+      <p class="text-neutral-400 text-xs sm:text-sm" data-i18n="tool4_desc">
+        Guía rápida de conceptos intraducibles: Dao, Dantian, Tribulación Celestial, Cara (Mianzi) y Píldoras Espirituales con pronunciación Pinyin.
+      </p>
+    </div>
+
+    <!-- Buscador en Tiempo Real -->
+    <div class="mb-6">
+      <input type="text" id="searchBox" placeholder="Buscar término (ej. Dantian, Dao, Qi, Cara, Píldora)..." class="w-full bg-neutral-900 border border-neutral-800 text-neutral-200 text-xs sm:text-sm p-4 font-mono focus:outline-none focus:border-brand-500" />
+    </div>
+
+    <!-- Lista de Términos -->
+    <div id="termsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
+
+    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
+    <div class="border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <div>
+        <p class="font-medium text-white mb-1" data-i18n="banner_title">¿Buscas algo nuevo que leer?</p>
+        <p class="text-neutral-400" data-i18n="banner_desc">Explora novelas traducidas de fantasía oriental en Dakesu.</p>
+      </div>
+      <a href="https://dakesu.net/novelas" class="text-brand-500 hover:text-white underline font-mono shrink-0">
+        dakesu.net/novelas &rarr;
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
+    <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
+  </footer>
+
+  <script src="/shared/i18n.js"></script>
+  <script>
+    const terms = [
+      {
+        cn: "气",
+        pinyin: "Qì / Ch'i",
+        es: "Qi / Energía Vital",
+        en: "Qi / Vital Energy",
+        desc: "La energía primordial que compone y fluye a través del universo y todos los seres vivos. El fundamento de toda técnica de cultivo marcial."
+      },
+      {
+        cn: "丹田",
+        pinyin: "Dān Tián",
+        es: "Dantian / Campo de Cinabrio",
+        en: "Elixir Field / Core Basin",
+        desc: "Región energética del cuerpo (principalmente tres pulgadas bajo el ombligo) donde se almacena y refina el Qi espiritual."
+      },
+      {
+        cn: "道",
+        pinyin: "Dào / Tao",
+        es: "El Dao / El Camino",
+        en: "The Way / Cosmic Law",
+        desc: "El orden natural y la verdad última del cosmos. Cada cultivador busca comprender su propio Dao (Dao de la Espada, Dao del Fuego, etc.)."
+      },
+      {
+        cn: "面子",
+        pinyin: "Miàn Zǐ",
+        es: "Dar o Perder Cara (Mianzi)",
+        en: "Face / Social Honor",
+        desc: "Reputación, prestigio y honor público. En novelas Xianxia, 'no dar cara' o 'perder cara' es el detonante del 90% de las batallas y vendettas de clanes."
+      },
+      {
+        cn: "辟谷",
+        pinyin: "Bì Gǔ",
+        es: "Bigu / Abstinencia de Granos",
+        en: "Grain Abstinence / Inedia",
+        desc: "Estado alcanzado por cultivadores avanzados donde dejan de consumir alimentos mortales y se nutren exclusivamente del Qi espiritual puro."
+      },
+      {
+        cn: "走火入魔",
+        pinyin: "Zǒu Huǒ Rù Mó",
+        es: "Desviación del Qi (Zouhuo Rumo)",
+        en: "Qi Deviation / Demonic Possession",
+        desc: "Estado peligroso donde el Qi se descontrola en los meridianos, causado por impaciencia, traumas o demonios internos. Causa locura o explosión corporal."
+      },
+      {
+        cn: "天劫",
+        pinyin: "Tiān Jié",
+        es: "Tribulación Celestial",
+        en: "Heavenly Tribulation",
+        desc: "Castigo o prueba cósmica enviada por la Voluntad Celestial para detener a quienes intentan desafiar las leyes naturales y alcanzar la inmortalidad."
+      },
+      {
+        cn: "储物袋",
+        pinyin: "Chǔ Wù Dài",
+        es: "Bolsa de Almacenamiento Espacial",
+        en: "Spatial Storage Ring / Bag",
+        desc: "Artefacto que contiene una dimensión de bolsillo en su interior para transportar armas, píldoras y tesoros sin peso adicional."
+      }
+    ];
+
+    function renderTerms(filter = "") {
+      const q = filter.toLowerCase().trim();
+      const container = document.getElementById("termsGrid");
+      const matched = terms.filter(t => 
+        t.es.toLowerCase().includes(q) || 
+        t.en.toLowerCase().includes(q) || 
+        t.cn.includes(q) || 
+        t.pinyin.toLowerCase().includes(q) || 
+        t.desc.toLowerCase().includes(q)
+      );
+
+      if (matched.length === 0) {
+        container.innerHTML = `<div class="col-span-2 text-center text-xs font-mono text-neutral-500 py-8">No se encontraron términos coincidentes.</div>`;
+        return;
+      }
+
+      container.innerHTML = matched.map(t => `
+        <div class="border border-neutral-800 bg-neutral-900/40 p-5 hover:border-neutral-700 transition-colors">
+          <div class="flex items-baseline justify-between mb-2">
+            <span class="text-2xl font-serif font-bold text-white">${t.cn}</span>
+            <span class="text-xs font-mono text-brand-500">${t.pinyin}</span>
+          </div>
+          <h3 class="text-sm font-semibold text-neutral-200 mb-1">
+            ${t.es}
+          </h3>
+          <p class="text-xs text-neutral-400 leading-relaxed">
+            ${t.desc}
+          </p>
+        </div>
+      `).join("");
+    }
+
+    document.getElementById("searchBox").addEventListener("input", (e) => {
+      renderTerms(e.target.value);
+    });
+
+    renderTerms();
+  </script>
+</body>
+</html>

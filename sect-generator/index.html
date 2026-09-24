@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Sectas y Clanes Antiguos | Dakesu Tools</title>
+  <meta name="description" content="Genera nombres verosímiles para sectas justas, clanes demoníacos, pabellones de alquimia y linajes ermitaños con lemas marciales tradicionales.">
+  <link rel="canonical" href="https://tools.dakesu.net/sect-generator">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#3E5CA4',
+              600: '#2E4378',
+              accent: '#E63946'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      font-family: monospace;
+      font-size: 11px;
+    }
+    .pill-btn {
+      color: rgba(255, 255, 255, 0.7);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0 4px;
+      font-weight: 600;
+    }
+    .pill-btn:hover { color: #fff; }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
+          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
+          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
+        </a>
+        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ sect-generator</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="control-pill" role="toolbar" aria-label="Selector de idioma">
+          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+            <span id="langToggleLabel">EN</span>
+          </button>
+        </div>
+        <a href="https://dakesu.net/novelas" class="text-xs text-neutral-400 hover:text-white transition-colors" data-i18n="nav_novels">
+          Volver a Novelas
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+    
+    <div class="mb-8">
+      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2" data-i18n="tool6_title">
+        Generador de Sectas y Clanes Antiguos
+      </h1>
+      <p class="text-neutral-400 text-xs sm:text-sm" data-i18n="tool6_desc">
+        Nombres para sectas ortodoxas, demoníacas, pabellones mercantiles y clanes ermitaños con lemas y elementos marciales.
+      </p>
+    </div>
+
+    <!-- Controles -->
+    <div class="border border-neutral-800 bg-neutral-900/40 p-6 mb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div>
+          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Alineación / Naturaleza</label>
+          <select id="factionType" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 font-mono focus:outline-none focus:border-brand-500">
+            <option value="righteous">Secta Justa / Camino Ortodoxo (Zhengdao)</option>
+            <option value="demonic">Camino Demoníaco / Culto Herético (Modao)</option>
+            <option value="merchant">Pabellón Mercantil / Subastas</option>
+            <option value="alchemist">Secta Alquímica y Refinamiento</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Cantidad</label>
+          <select id="countSelect" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 font-mono focus:outline-none focus:border-brand-500">
+            <option value="4">4 facciones</option>
+            <option value="8">8 facciones</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="generateBtn" class="bg-brand-500 hover:bg-brand-600 active:scale-[0.99] text-white text-xs font-medium px-6 py-3 transition-all font-mono">
+        Generar Facciones
+      </button>
+    </div>
+
+    <!-- Resultados -->
+    <div id="sectsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
+
+    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
+    <div class="border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <div>
+        <p class="font-medium text-white mb-1" data-i18n="banner_title">¿Buscas algo nuevo que leer?</p>
+        <p class="text-neutral-400" data-i18n="banner_desc">Explora novelas de rivalidad entre sectas y clanes en Dakesu.</p>
+      </div>
+      <a href="https://dakesu.net/novelas" class="text-brand-500 hover:text-white underline font-mono shrink-0">
+        dakesu.net/novelas &rarr;
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
+    <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
+  </footer>
+
+  <script src="/shared/i18n.js"></script>
+  <script>
+    const sectPool = {
+      righteous: [
+        { cn: "天剑宗", pinyin: "Tiān Jiàn Zōng", es: "Secta de la Espada Celestial", motto: "La justicia del cielo afila nuestra hoja inmortal", specialty: "Espadas voladoras y técnicas de trueno" },
+        { cn: "紫霞门", pinyin: "Zǐ Xiá Mén", es: "Puerta de la Niebla Púrpura", motto: "Nacidos del alba, templados en la niebla del Dao", specialty: "Cultivo respiratorio de energía solar y mantras" },
+        { cn: "玄天阁", pinyin: "Xuán Tiān Gé", es: "Pabellón del Cielo Misterioso", motto: "Observar el abismo estelar para preservar el equilibrio", specialty: "Adivinación taoísta y matrices de formación defensivas" },
+        { cn: "清虚观", pinyin: "Qīng Xū Guàn", es: "Templo del Vacío Puro", motto: "La no-acción es el camino supremo del universo", specialty: "Refinamiento de píldoras longevidad y meditación" }
+      ],
+      demonic: [
+        { cn: "幽冥宫", pinyin: "Yōu Míng Gōng", es: "Palacio de las Sombras Infernales", motto: "En la oscuridad sin fin forjamos nuestro trono sangriento", specialty: "Control de cadáveres refinados y venenos espirituales" },
+        { cn: "噬血宗", pinyin: "Shì Xuè Zōng", es: "Secta Devoradora de Sangre", motto: "Tu esencia es mi avance; tu alma, mi sustento", specialty: "Cultivo dual forzado y sacrificios de Qi de sangre" },
+        { cn: "万毒教", pinyin: "Wàn Dú Jiào", es: "Culto de los Diez Mil Venenos", motto: "Incluso los cielos perecen ante una gota de hiel cósmica", specialty: "Invocación de insectos espirituales Gu y miasma mortal" },
+        { cn: "天魔窟", pinyin: "Tiān Mó Kū", es: "Gruta del Demonio Celestial", motto: "Destruir el orden para reinar sobre las cenizas del karma", specialty: "Técnicas de ilusión mental y posesión espiritual" }
+      ],
+      merchant: [
+        { cn: "万宝楼", pinyin: "Wàn Bǎo Lóu", es: "Pabellón de los Diez Mil Tesoros", motto: "No hay tesoro sin precio ni secreto sin comprador", specialty: "Grandes subastas continentales y transporte interestelar" },
+        { cn: "通天商会", pinyin: "Tōng Tiān Shāng Huì", es: "Cámara de Comercio del Cielo Conectado", motto: "Piedras espirituales en mano, las leyes del mundo se abren", specialty: "Intercambio de divisas, artefactos y préstamos de cultivo" }
+      ],
+      alchemist: [
+        { cn: "药王宗", pinyin: "Yào Wáng Zōng", es: "Secta del Rey de la Medicina", motto: "Una píldora salva al mundo; diez mil calderos purifican el Dao", specialty: "Píldoras de ruptura de reino y elixires divinos" },
+        { cn: "神农谷", pinyin: "Shén Nóng Gǔ", es: "Valle del Granjero Divino", motto: "Cosechar las hierbas milenarias que desafían a la muerte", specialty: "Plantaciones de hierbas espirituales y domesticación de bestias" }
+      ]
+    };
+
+    function renderSects() {
+      const faction = document.getElementById("factionType").value;
+      const count = parseInt(document.getElementById("countSelect").value, 10);
+      const container = document.getElementById("sectsGrid");
+
+      const pool = sectPool[faction] || [];
+      const shuffled = [...pool].sort(() => 0.5 - Math.random());
+      const selected = [];
+
+      while (selected.length < count) {
+        for (let item of shuffled) {
+          if (selected.length < count) selected.push(item);
+        }
+      }
+
+      container.innerHTML = selected.map(s => `
+        <div class="border border-neutral-800 bg-neutral-900/40 p-5 hover:border-neutral-700 transition-colors flex flex-col justify-between">
+          <div>
+            <div class="flex items-baseline justify-between mb-2">
+              <span class="text-2xl font-serif font-bold text-white">${s.cn}</span>
+              <span class="text-xs font-mono text-brand-500">${s.pinyin}</span>
+            </div>
+            <h3 class="text-sm font-semibold text-neutral-200 mb-1">${s.es}</h3>
+            <p class="text-xs text-neutral-400 italic mb-3">"${s.motto}"</p>
+            <div class="text-[11px] font-mono text-neutral-500 bg-neutral-950 p-2 border border-neutral-800/80">
+              <span class="text-neutral-400">Especialidad:</span> ${s.specialty}
+            </div>
+          </div>
+          <button onclick="navigator.clipboard.writeText('${s.cn} (${s.es})'); this.innerText = 'Copiado';" class="mt-4 text-xs font-mono text-neutral-500 hover:text-white self-end">
+            Copiar
+          </button>
+        </div>
+      `).join("");
+    }
+
+    document.getElementById("factionType").addEventListener("change", renderSects);
+    document.getElementById("countSelect").addEventListener("change", renderSects);
+    document.getElementById("generateBtn").addEventListener("click", renderSects);
+
+    renderSects();
+  </script>
+</body>
+</html>

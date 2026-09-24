@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conversor de Monedas de Novelas Fantásticas y Cultivo | Dakesu Tools</title>
+  <meta name="description" content="Calcula conversiones entre monedas de cobre, lingotes de plata, lingotes de oro y piedras espirituales de bajo, medio, alto y grado supremo.">
+  <link rel="canonical" href="https://tools.dakesu.net/currency-converter">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#3E5CA4',
+              600: '#2E4378',
+              accent: '#E63946'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      font-family: monospace;
+      font-size: 11px;
+    }
+    .pill-btn {
+      color: rgba(255, 255, 255, 0.7);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0 4px;
+      font-weight: 600;
+    }
+    .pill-btn:hover { color: #fff; }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
+          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
+          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
+        </a>
+        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ currency-converter</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="control-pill" role="toolbar" aria-label="Selector de idioma">
+          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+            <span id="langToggleLabel">EN</span>
+          </button>
+        </div>
+        <a href="https://dakesu.net/novelas" class="text-xs text-neutral-400 hover:text-white transition-colors" data-i18n="nav_novels">
+          Volver a Novelas
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido Principal -->
+  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+    
+    <div class="mb-8">
+      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2" data-i18n="tool5_title">
+        Conversor de Monedas de Novelas Fantásticas
+      </h1>
+      <p class="text-neutral-400 text-xs sm:text-sm" data-i18n="tool5_desc">
+        Convierte entre Monedas de Cobre, Lingotes de Plata, Oro y Piedras de Espíritu (Bajo, Medio y Alto Grado).
+      </p>
+    </div>
+
+    <!-- Conversor Card -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      
+      <!-- Entrada -->
+      <div class="border border-neutral-800 bg-neutral-900/40 p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Cantidad</label>
+          <input type="number" id="inputAmount" value="100" min="1" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-lg p-3 font-mono focus:outline-none focus:border-brand-500" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Moneda de Origen</label>
+          <select id="sourceCurrency" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 font-mono focus:outline-none focus:border-brand-500">
+            <optgroup label="Monedas Mortales">
+              <option value="copper">Monedas de Cobre (Wen / 铜钱)</option>
+              <option value="silver">Lingotes de Plata (Tael / 白银)</option>
+              <option value="gold" selected>Lingotes de Oro (Jin / 黄金)</option>
+            </optgroup>
+            <optgroup label="Monedas Inmortales (Piedras de Espíritu)">
+              <option value="ls_low">Piedras Espirituales de Grado Bajo (下品灵石)</option>
+              <option value="ls_mid">Piedras Espirituales de Grado Medio (中品灵石)</option>
+              <option value="ls_high">Piedras Espirituales de Grado Alto (上品灵石)</option>
+              <option value="ls_top">Piedras Espirituales de Grado Supremo (极品灵石)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="p-3 bg-neutral-950 border border-neutral-800/80 text-[11px] text-neutral-500 font-mono">
+          <strong>Regla canónica:</strong> 1.000 Cobres = 1 Plata · 10 Platas = 1 Oro · 100 Oros = 1 Piedra de Grado Bajo · Tasa 100:1 entre grados de piedras.
+        </div>
+      </div>
+
+      <!-- Salida / Resultados -->
+      <div class="border border-neutral-800 bg-neutral-900/60 p-6 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono text-brand-500 uppercase tracking-wider block mb-4">Equivalencias Calculadas</span>
+          
+          <div class="space-y-3 font-mono text-xs">
+            <div class="flex justify-between border-b border-neutral-800 pb-2">
+              <span class="text-neutral-400">Monedas de Cobre:</span>
+              <span class="text-white font-bold" id="outCopper">0</span>
+            </div>
+            <div class="flex justify-between border-b border-neutral-800 pb-2">
+              <span class="text-neutral-400">Lingotes de Plata:</span>
+              <span class="text-white font-bold" id="outSilver">0</span>
+            </div>
+            <div class="flex justify-between border-b border-neutral-800 pb-2">
+              <span class="text-neutral-400">Lingotes de Oro:</span>
+              <span class="text-white font-bold" id="outGold">0</span>
+            </div>
+            <div class="flex justify-between border-b border-neutral-800 pb-2">
+              <span class="text-neutral-400">Piedras Grado Bajo:</span>
+              <span class="text-brand-500 font-bold" id="outLow">0</span>
+            </div>
+            <div class="flex justify-between border-b border-neutral-800 pb-2">
+              <span class="text-neutral-400">Piedras Grado Medio:</span>
+              <span class="text-brand-500 font-bold" id="outMid">0</span>
+            </div>
+            <div class="flex justify-between border-b border-neutral-800 pb-2">
+              <span class="text-neutral-400">Piedras Grado Alto:</span>
+              <span class="text-brand-500 font-bold" id="outHigh">0</span>
+            </div>
+            <div class="flex justify-between pt-1">
+              <span class="text-neutral-400">Piedras Grado Supremo:</span>
+              <span class="text-white font-bold" id="outTop">0</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="navigator.clipboard.writeText('Conversión calculada en Dakesu Tools'); this.innerText = 'Copiado';" class="mt-6 text-xs text-neutral-400 hover:text-white font-mono self-end">
+          Copiar desglose
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
+    <div class="border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+      <div>
+        <p class="font-medium text-white mb-1" data-i18n="banner_title">¿Buscas algo nuevo que leer?</p>
+        <p class="text-neutral-400" data-i18n="banner_desc">Explora novelas de fantasía y cultivo taoísta en Dakesu.</p>
+      </div>
+      <a href="https://dakesu.net/novelas" class="text-brand-500 hover:text-white underline font-mono shrink-0">
+        dakesu.net/novelas &rarr;
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
+    <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
+  </footer>
+
+  <script src="/shared/i18n.js"></script>
+  <script>
+    // Valor base en "Monedas de Cobre"
+    const RATES = {
+      copper: 1,
+      silver: 1000,
+      gold: 10000,
+      ls_low: 1000000,          // 100 Oros = 1 Piedra Baja
+      ls_mid: 100000000,        // 100 Bajas = 1 Media
+      ls_high: 10000000000,     // 100 Medias = 1 Alta
+      ls_top: 1000000000000     // 100 Altas = 1 Suprema
+    };
+
+    function convert() {
+      const amount = parseFloat(document.getElementById('inputAmount').value) || 0;
+      const src = document.getElementById('sourceCurrency').value;
+
+      const totalCopper = amount * (RATES[src] || 1);
+
+      document.getElementById('outCopper').innerText = totalCopper.toLocaleString();
+      document.getElementById('outSilver').innerText = (totalCopper / RATES.silver).toLocaleString(undefined, { maximumFractionDigits: 2 });
+      document.getElementById('outGold').innerText = (totalCopper / RATES.gold).toLocaleString(undefined, { maximumFractionDigits: 2 });
+      document.getElementById('outLow').innerText = (totalCopper / RATES.ls_low).toLocaleString(undefined, { maximumFractionDigits: 4 });
+      document.getElementById('outMid').innerText = (totalCopper / RATES.ls_mid).toLocaleString(undefined, { maximumFractionDigits: 6 });
+      document.getElementById('outHigh').innerText = (totalCopper / RATES.ls_high).toLocaleString(undefined, { maximumFractionDigits: 8 });
+      document.getElementById('outTop').innerText = (totalCopper / RATES.ls_top).toLocaleString(undefined, { maximumFractionDigits: 10 });
+    }
+
+    document.getElementById('inputAmount').addEventListener('input', convert);
+    document.getElementById('sourceCurrency').addEventListener('change', convert);
+
+    convert();
+  </script>
+</body>
+</html>
