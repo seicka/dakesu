@@ -1,198 +1,509 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Sectas y Clanes Antiguos | Dakesu Tools</title>
-  <meta name="description" content="Genera nombres verosímiles para sectas justas, clanes demoníacos, pabellones de alquimia y linajes ermitaños con lemas marciales tradicionales.">
+  <title>Generador de Sectas y Clanes · Dakesu Tools</title>
+  <meta name="description" content="Generador auténtico de sectas ortodoxas, clanes demoníacos, pabellones mercantiles y órdenes alquímicas con lemas marciales.">
   <link rel="canonical" href="https://tools.dakesu.net/sect-generator">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              500: '#3E5CA4',
-              600: '#2E4378',
-              accent: '#E63946'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
   <style>
-    .control-pill {
+    :root {
+      --bg: #05070a;
+      --text: #f2ede4;
+      --text-muted: #807d8a;
+      --border: rgba(242, 237, 228, 0.12);
+      --hover-bg: rgba(242, 237, 228, 0.05);
+      --input-bg: #0d1017;
+      --pill-bg: rgba(255, 255, 255, 0.05);
+      --pill-border: rgba(255, 255, 255, 0.14);
+      --pill-hover-bg: rgba(255, 255, 255, 0.12);
+      --pill-text: rgba(255, 255, 255, 0.7);
+      --pill-text-active: #ffffff;
+      --accent: #e83424;
+    }
+
+    [data-theme="light"] {
+      --bg: #faf7f2;
+      --text: #17181c;
+      --text-muted: #72747d;
+      --border: rgba(0, 0, 0, 0.08);
+      --hover-bg: rgba(0, 0, 0, 0.03);
+      --input-bg: #ffffff;
+      --pill-bg: rgba(0, 0, 0, 0.04);
+      --pill-border: rgba(0, 0, 0, 0.1);
+      --pill-hover-bg: rgba(0, 0, 0, 0.08);
+      --pill-text: rgba(0, 0, 0, 0.65);
+      --pill-text-active: #000000;
+      --accent: #d32f2f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      min-height: 100%;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .back-link {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(8px);
-      font-family: monospace;
-      font-size: 11px;
+      transition: color 0.15s ease;
+    }
+    .back-link:hover { color: var(--text); }
+
+    /* Control Pill Canónico */
+    .control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 6px;
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--pill-border);
+      border-radius: 9999px;
+      font-size: 12px;
+      line-height: 1;
     }
     .pill-btn {
-      color: rgba(255, 255, 255, 0.7);
       background: transparent;
       border: none;
+      color: var(--pill-text);
+      padding: 4px 8px;
+      border-radius: 9999px;
       cursor: pointer;
-      padding: 0 4px;
+      font-size: 11px;
       font-weight: 600;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
     }
-    .pill-btn:hover { color: #fff; }
+    .pill-btn:hover { background: var(--pill-hover-bg); color: var(--pill-text-active); }
+    .pill-btn-icon { padding: 4px 6px; }
+    .pill-divider { color: var(--border); font-size: 11px; user-select: none; padding: 0 2px; }
+
+    /* Header */
+    .app-header {
+      margin-bottom: 32px;
+    }
+    .app-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .app-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Form Controls */
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: flex-end;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 600px) {
+      .controls { grid-template-columns: 1fr; }
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    select {
+      width: 100%;
+      height: 40px;
+      background: var(--input-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 0 12px;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    select:focus { border-color: var(--text); }
+
+    .submit-btn {
+      height: 40px;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 0 20px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+      white-space: nowrap;
+    }
+    .submit-btn:hover { opacity: 0.88; }
+    .submit-btn:active { transform: scale(0.98); }
+
+    /* Grid de Sectas */
+    .sects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 600px) {
+      .sects-grid { grid-template-columns: 1fr; }
+    }
+
+    .sect-card {
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 180px;
+      transition: border-color 0.15s ease;
+    }
+    .sect-card:hover { border-color: var(--text-muted); }
+
+    .sect-orig {
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+    }
+    .sect-pinyin {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: monospace;
+      margin-bottom: 8px;
+    }
+    .sect-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .sect-motto {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .sect-feat {
+      font-size: 12px;
+      line-height: 1.4;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      color: var(--text);
+    }
+    .sect-feat strong {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .copy-btn {
+      align-self: flex-end;
+      background: transparent;
+      border: none;
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-top: 12px;
+      padding: 2px 4px;
+    }
+    .copy-btn:hover { color: var(--text); }
   </style>
 </head>
-<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+<body>
 
-  <!-- Header -->
-  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
-          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
-          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
-        </a>
-        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ sect-generator</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="control-pill" role="toolbar" aria-label="Selector de idioma">
-          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
-            <span id="langToggleLabel">EN</span>
-          </button>
-        </div>
-        <a href="https://dakesu.net/novelas" class="text-xs text-neutral-400 hover:text-white transition-colors" data-i18n="nav_novels">
-          Volver a Novelas
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Contenido Principal -->
-  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+  <div class="page">
     
-    <div class="mb-8">
-      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2" data-i18n="tool6_title">
-        Generador de Sectas y Clanes Antiguos
-      </h1>
-      <p class="text-neutral-400 text-xs sm:text-sm" data-i18n="tool6_desc">
-        Nombres para sectas ortodoxas, demoníacas, pabellones mercantiles y clanes ermitaños con lemas y elementos marciales.
-      </p>
+    <header class="top-bar">
+      <a href="/" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        <span>Tools</span>
+      </a>
+
+      <!-- Pill Switch Canónico (Mabelcox) -->
+      <div class="control-pill" role="toolbar" aria-label="Preferencias">
+        <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+          <span id="langToggleLabel">EN</span>
+        </button>
+
+        <span class="pill-divider" aria-hidden="true">/</span>
+
+        <button id="themeToggle" class="pill-btn pill-btn-icon" aria-label="Cambiar modo de color" title="Cambiar tema">
+          <svg class="sun-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" style="display:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-header">
+      <h1 class="app-title" data-i18n="sg_title">Generador de Sectas</h1>
+      <p class="app-desc" data-i18n="tool6_desc">Generador de linajes ortodoxos, demoníacos, pabellones mercantiles y órdenes alquímicas.</p>
     </div>
 
     <!-- Controles -->
-    <div class="border border-neutral-800 bg-neutral-900/40 p-6 mb-8">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Alineación / Naturaleza</label>
-          <select id="factionType" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 font-mono focus:outline-none focus:border-brand-500">
-            <option value="righteous">Secta Justa / Camino Ortodoxo (Zhengdao)</option>
-            <option value="demonic">Camino Demoníaco / Culto Herético (Modao)</option>
-            <option value="merchant">Pabellón Mercantil / Subastas</option>
-            <option value="alchemist">Secta Alquímica y Refinamiento</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Cantidad</label>
-          <select id="countSelect" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 font-mono focus:outline-none focus:border-brand-500">
-            <option value="4">4 facciones</option>
-            <option value="8">8 facciones</option>
-          </select>
-        </div>
+    <div class="controls">
+      <div class="field">
+        <label data-i18n="sg_faction">Alineación</label>
+        <select id="factionSelect">
+          <option value="righteous">Secta Justa / Ortodoxa (Zhengdao)</option>
+          <option value="demonic">Camino Demoníaco (Modao)</option>
+          <option value="merchant">Pabellón Mercantil</option>
+          <option value="alchemist">Secta Alquímica</option>
+        </select>
       </div>
 
-      <button id="generateBtn" class="bg-brand-500 hover:bg-brand-600 active:scale-[0.99] text-white text-xs font-medium px-6 py-3 transition-all font-mono">
-        Generar Facciones
-      </button>
-    </div>
-
-    <!-- Resultados -->
-    <div id="sectsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
-
-    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
-    <div class="border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-      <div>
-        <p class="font-medium text-white mb-1" data-i18n="banner_title">¿Buscas algo nuevo que leer?</p>
-        <p class="text-neutral-400" data-i18n="banner_desc">Explora novelas de rivalidad entre sectas y clanes en Dakesu.</p>
+      <div class="field">
+        <label data-i18n="an_count">Cantidad</label>
+        <select id="countSelect">
+          <option value="4">4 facciones</option>
+          <option value="8">8 facciones</option>
+        </select>
       </div>
-      <a href="https://dakesu.net/novelas" class="text-brand-500 hover:text-white underline font-mono shrink-0">
-        dakesu.net/novelas &rarr;
-      </a>
+
+      <button id="generateBtn" class="submit-btn" data-i18n="sg_btn">Generar</button>
     </div>
 
-  </main>
+    <!-- Grid de Resultados -->
+    <div id="sectsGrid" class="sects-grid"></div>
 
-  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
-    <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
-  </footer>
+  </div>
 
   <script src="/shared/i18n.js"></script>
   <script>
     const sectPool = {
       righteous: [
-        { cn: "天剑宗", pinyin: "Tiān Jiàn Zōng", es: "Secta de la Espada Celestial", motto: "La justicia del cielo afila nuestra hoja inmortal", specialty: "Espadas voladoras y técnicas de trueno" },
-        { cn: "紫霞门", pinyin: "Zǐ Xiá Mén", es: "Puerta de la Niebla Púrpura", motto: "Nacidos del alba, templados en la niebla del Dao", specialty: "Cultivo respiratorio de energía solar y mantras" },
-        { cn: "玄天阁", pinyin: "Xuán Tiān Gé", es: "Pabellón del Cielo Misterioso", motto: "Observar el abismo estelar para preservar el equilibrio", specialty: "Adivinación taoísta y matrices de formación defensivas" },
-        { cn: "清虚观", pinyin: "Qīng Xū Guàn", es: "Templo del Vacío Puro", motto: "La no-acción es el camino supremo del universo", specialty: "Refinamiento de píldoras longevidad y meditación" }
+        {
+          cn: "天剑宗",
+          pinyin: "Tiān Jiàn Zōng",
+          es: "Secta de la Espada Celestial",
+          en: "Heaven Sword Sect",
+          motto_es: "La justicia del cielo afila nuestra hoja inmortal",
+          motto_en: "Heaven's justice whets our immortal blade",
+          feat_es: "Espadas voladoras y técnicas de trueno celestial",
+          feat_en: "Flying sword arts and celestial thunder arrays"
+        },
+        {
+          cn: "紫霞门",
+          pinyin: "Zǐ Xiá Mén",
+          es: "Puerta de la Niebla Púrpura",
+          en: "Purple Mist Gate",
+          motto_es: "Nacidos del alba, templados en la niebla del Dao",
+          motto_en: "Born of dawn, tempered in Daoist mist",
+          feat_es: "Cultivo respiratorio solar y mantras defensivos",
+          feat_en: "Solar breath cultivation and defensive barrier mantras"
+        },
+        {
+          cn: "玄天阁",
+          pinyin: "Xuán Tiān Gé",
+          es: "Pabellón del Cielo Misterioso",
+          en: "Profound Heaven Pavilion",
+          motto_es: "Observar el abismo estelar para preservar el equilibrio",
+          motto_en: "Observing astral depths to preserve eternal balance",
+          feat_es: "Adivinación taoísta y matrices de formación",
+          feat_en: "Daoist divination and cosmic formation grids"
+        },
+        {
+          cn: "清虚观",
+          pinyin: "Qīng Xū Guàn",
+          es: "Templo del Vacío Puro",
+          en: "Pure Void Temple",
+          motto_es: "La no-acción es el camino supremo del cosmos",
+          motto_en: "Non-action is the highest cosmic pathway",
+          feat_es: "Refinamiento de píldoras de longevidad y meditación",
+          feat_en: "Longevity pill refining and deep trance arts"
+        }
       ],
       demonic: [
-        { cn: "幽冥宫", pinyin: "Yōu Míng Gōng", es: "Palacio de las Sombras Infernales", motto: "En la oscuridad sin fin forjamos nuestro trono sangriento", specialty: "Control de cadáveres refinados y venenos espirituales" },
-        { cn: "噬血宗", pinyin: "Shì Xuè Zōng", es: "Secta Devoradora de Sangre", motto: "Tu esencia es mi avance; tu alma, mi sustento", specialty: "Cultivo dual forzado y sacrificios de Qi de sangre" },
-        { cn: "万毒教", pinyin: "Wàn Dú Jiào", es: "Culto de los Diez Mil Venenos", motto: "Incluso los cielos perecen ante una gota de hiel cósmica", specialty: "Invocación de insectos espirituales Gu y miasma mortal" },
-        { cn: "天魔窟", pinyin: "Tiān Mó Kū", es: "Gruta del Demonio Celestial", motto: "Destruir el orden para reinar sobre las cenizas del karma", specialty: "Técnicas de ilusión mental y posesión espiritual" }
+        {
+          cn: "幽冥宫",
+          pinyin: "Yōu Míng Gōng",
+          es: "Palacio de las Sombras Infernales",
+          en: "Nether Shadow Palace",
+          motto_es: "En la oscuridad sin fin forjamos nuestro trono sangriento",
+          motto_en: "In endless dark we forge our bloody throne",
+          feat_es: "Refinamiento de cadáveres espirituales y sombras",
+          feat_en: "Corpse refining and spiritual shadow curses"
+        },
+        {
+          cn: "噬血宗",
+          pinyin: "Shì Xuè Zōng",
+          es: "Secta Devoradora de Sangre",
+          en: "Blood Devourer Sect",
+          motto_es: "Tu esencia es mi avance; tu alma, mi sustento",
+          motto_en: "Your essence fuels my breakthrough; your soul, my feast",
+          feat_es: "Cultivo de sangre y sacrificios energéticos",
+          feat_en: "Blood Qi drain and sacrificial arts"
+        },
+        {
+          cn: "万毒教",
+          pinyin: "Wàn Dú Jiào",
+          es: "Culto de los Diez Mil Venenos",
+          en: "Ten Thousand Poisons Cult",
+          motto_es: "Incluso los cielos perecen ante una gota de hiel cósmica",
+          motto_en: "Even Heaven dissolves before our cosmic venom",
+          feat_es: "Crianza de insectos espirituales Gu y miasmas",
+          feat_en: "Gu spirit insects breeding and deadly miasmas"
+        },
+        {
+          cn: "天魔窟",
+          pinyin: "Tiān Mó Kū",
+          es: "Gruta del Demonio Celestial",
+          en: "Celestial Demon Grotto",
+          motto_es: "Destruir el orden para reinar sobre las cenizas del karma",
+          motto_en: "Destroy the order to rule upon karmic ashes",
+          feat_es: "Ilusiones mentales destructivas y posesión corporal",
+          feat_en: "Mind corruption illusions and spirit possession"
+        }
       ],
       merchant: [
-        { cn: "万宝楼", pinyin: "Wàn Bǎo Lóu", es: "Pabellón de los Diez Mil Tesoros", motto: "No hay tesoro sin precio ni secreto sin comprador", specialty: "Grandes subastas continentales y transporte interestelar" },
-        { cn: "通天商会", pinyin: "Tōng Tiān Shāng Huì", es: "Cámara de Comercio del Cielo Conectado", motto: "Piedras espirituales en mano, las leyes del mundo se abren", specialty: "Intercambio de divisas, artefactos y préstamos de cultivo" }
+        {
+          cn: "万宝楼",
+          pinyin: "Wàn Bǎo Lóu",
+          es: "Pabellón de los Diez Mil Tesoros",
+          en: "Myriad Treasures Pavilion",
+          motto_es: "No hay tesoro sin precio ni secreto sin comprador",
+          motto_en: "No treasure lacks a price; no secret lacks a buyer",
+          feat_es: "Subastas continentales y transporte interestelar",
+          feat_en: "Continental auctions and cross-realm cargo"
+        },
+        {
+          cn: "通天商会",
+          pinyin: "Tōng Tiān Shāng Huì",
+          es: "Cámara Mercantil del Cielo",
+          en: "Skyreach Merchant Guild",
+          motto_es: "Con piedras espirituales en mano, las leyes del mundo se abren",
+          motto_en: "With spirit stones in hand, world laws yield",
+          feat_es: "Crédito de cultivo y monopolio de artefactos",
+          feat_en: "Cultivation credit and jade artifact trade"
+        }
       ],
       alchemist: [
-        { cn: "药王宗", pinyin: "Yào Wáng Zōng", es: "Secta del Rey de la Medicina", motto: "Una píldora salva al mundo; diez mil calderos purifican el Dao", specialty: "Píldoras de ruptura de reino y elixires divinos" },
-        { cn: "神农谷", pinyin: "Shén Nóng Gǔ", es: "Valle del Granjero Divino", motto: "Cosechar las hierbas milenarias que desafían a la muerte", specialty: "Plantaciones de hierbas espirituales y domesticación de bestias" }
+        {
+          cn: "药王宗",
+          pinyin: "Yào Wáng Zōng",
+          es: "Secta del Rey de la Medicina",
+          en: "Medicine King Sect",
+          motto_es: "Una píldora salva al mundo; un caldero purifica el Dao",
+          motto_en: "One pill saves a realm; one cauldron refines the Dao",
+          feat_es: "Píldoras de ruptura de reino y calderos celestiales",
+          feat_en: "Breakthrough elixirs and celestial cauldron refinement"
+        },
+        {
+          cn: "神农谷",
+          pinyin: "Shén Nóng Gǔ",
+          es: "Valle del Granjero Divino",
+          en: "Divine Farmer Valley",
+          motto_es: "Cosechar las hierbas milenarias que desafían la muerte",
+          motto_en: "Harvesting millennial herbs that defy mortality",
+          feat_es: "Plantaciones de hierbas espirituales y bestias botánicas",
+          feat_en: "Spiritual herb gardens and sacred botanical beasts"
+        }
       ]
     };
 
     function renderSects() {
-      const faction = document.getElementById("factionType").value;
+      const faction = document.getElementById("factionSelect").value;
       const count = parseInt(document.getElementById("countSelect").value, 10);
-      const container = document.getElementById("sectsGrid");
+      const grid = document.getElementById("sectsGrid");
+      const isEs = currentLang === 'es';
 
       const pool = sectPool[faction] || [];
       const shuffled = [...pool].sort(() => 0.5 - Math.random());
       const selected = [];
 
-      while (selected.length < count) {
+      while (selected.length < count && pool.length > 0) {
         for (let item of shuffled) {
           if (selected.length < count) selected.push(item);
         }
       }
 
-      container.innerHTML = selected.map(s => `
-        <div class="border border-neutral-800 bg-neutral-900/40 p-5 hover:border-neutral-700 transition-colors flex flex-col justify-between">
+      grid.innerHTML = selected.map(s => `
+        <article class="sect-card">
           <div>
-            <div class="flex items-baseline justify-between mb-2">
-              <span class="text-2xl font-serif font-bold text-white">${s.cn}</span>
-              <span class="text-xs font-mono text-brand-500">${s.pinyin}</span>
-            </div>
-            <h3 class="text-sm font-semibold text-neutral-200 mb-1">${s.es}</h3>
-            <p class="text-xs text-neutral-400 italic mb-3">"${s.motto}"</p>
-            <div class="text-[11px] font-mono text-neutral-500 bg-neutral-950 p-2 border border-neutral-800/80">
-              <span class="text-neutral-400">Especialidad:</span> ${s.specialty}
+            <div class="sect-orig">${s.cn}</div>
+            <div class="sect-pinyin">${s.pinyin}</div>
+            <h2 class="sect-name">${isEs ? s.es : s.en}</h2>
+            <div class="sect-motto">"${isEs ? s.motto_es : s.motto_en}"</div>
+            <div class="sect-feat">
+              <strong>${isEs ? 'Especialidad' : 'Specialty'}:</strong>
+              <span>${isEs ? s.feat_es : s.feat_en}</span>
             </div>
           </div>
-          <button onclick="navigator.clipboard.writeText('${s.cn} (${s.es})'); this.innerText = 'Copiado';" class="mt-4 text-xs font-mono text-neutral-500 hover:text-white self-end">
-            Copiar
+          <button onclick="navigator.clipboard.writeText('${s.cn} (${isEs ? s.es : s.en})'); this.innerText = '${isEs ? '¡Copiado!' : 'Copied!'}';" class="copy-btn">
+            ${isEs ? 'Copiar' : 'Copy'}
           </button>
-        </div>
+        </article>
       `).join("");
     }
 
-    document.getElementById("factionType").addEventListener("change", renderSects);
+    document.getElementById("factionSelect").addEventListener("change", renderSects);
     document.getElementById("countSelect").addEventListener("change", renderSects);
     document.getElementById("generateBtn").addEventListener("click", renderSects);
 
-    renderSects();
+    window.addEventListener('load', renderSects);
+    window.addEventListener('dakesu:langchange', renderSects);
   </script>
 </body>
 </html>

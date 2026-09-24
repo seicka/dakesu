@@ -1,111 +1,256 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Diccionario de Términos Daoístas y Marciales | Dakesu Tools</title>
-  <meta name="description" content="Glosario rápido con caracteres chinos, pinyin y significado de conceptos wuxia/xianxia: Dantian, Qi, Cara (Mianzi), Alma Naciente y Tribulaciones.">
+  <title>Diccionario Daoísta y Marcial · Dakesu Tools</title>
+  <meta name="description" content="Glosario rápido con caracteres chinos, pinyin y significado de conceptos wuxia y xianxia: Dantian, Qi, Cara y Tribulaciones.">
   <link rel="canonical" href="https://tools.dakesu.net/daoist-glossary">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              500: '#3E5CA4',
-              600: '#2E4378',
-              accent: '#E63946'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
   <style>
-    .control-pill {
+    :root {
+      --bg: #05070a;
+      --text: #f2ede4;
+      --text-muted: #807d8a;
+      --border: rgba(242, 237, 228, 0.12);
+      --hover-bg: rgba(242, 237, 228, 0.05);
+      --input-bg: #0d1017;
+      --pill-bg: rgba(255, 255, 255, 0.05);
+      --pill-border: rgba(255, 255, 255, 0.14);
+      --pill-hover-bg: rgba(255, 255, 255, 0.12);
+      --pill-text: rgba(255, 255, 255, 0.7);
+      --pill-text-active: #ffffff;
+      --accent: #e83424;
+    }
+
+    [data-theme="light"] {
+      --bg: #faf7f2;
+      --text: #17181c;
+      --text-muted: #72747d;
+      --border: rgba(0, 0, 0, 0.08);
+      --hover-bg: rgba(0, 0, 0, 0.03);
+      --input-bg: #ffffff;
+      --pill-bg: rgba(0, 0, 0, 0.04);
+      --pill-border: rgba(0, 0, 0, 0.1);
+      --pill-hover-bg: rgba(0, 0, 0, 0.08);
+      --pill-text: rgba(0, 0, 0, 0.65);
+      --pill-text-active: #000000;
+      --accent: #d32f2f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      min-height: 100%;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .back-link {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(8px);
-      font-family: monospace;
-      font-size: 11px;
+      transition: color 0.15s ease;
+    }
+    .back-link:hover { color: var(--text); }
+
+    /* Control Pill Canónico */
+    .control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 6px;
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--pill-border);
+      border-radius: 9999px;
+      font-size: 12px;
+      line-height: 1;
     }
     .pill-btn {
-      color: rgba(255, 255, 255, 0.7);
       background: transparent;
       border: none;
+      color: var(--pill-text);
+      padding: 4px 8px;
+      border-radius: 9999px;
       cursor: pointer;
-      padding: 0 4px;
+      font-size: 11px;
       font-weight: 600;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
     }
-    .pill-btn:hover { color: #fff; }
+    .pill-btn:hover { background: var(--pill-hover-bg); color: var(--pill-text-active); }
+    .pill-btn-icon { padding: 4px 6px; }
+    .pill-divider { color: var(--border); font-size: 11px; user-select: none; padding: 0 2px; }
+
+    /* Header */
+    .app-header {
+      margin-bottom: 32px;
+    }
+    .app-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .app-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Buscador */
+    .search-wrap {
+      margin-bottom: 32px;
+    }
+    input[type="text"] {
+      width: 100%;
+      height: 44px;
+      background: var(--input-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 0 16px;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    input[type="text"]:focus {
+      border-color: var(--text);
+    }
+
+    /* Grid de Términos */
+    .terms-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 600px) {
+      .terms-grid { grid-template-columns: 1fr; }
+    }
+
+    .term-card {
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+      padding: 20px;
+      transition: border-color 0.15s ease;
+    }
+    .term-card:hover {
+      border-color: var(--text-muted);
+    }
+
+    .term-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+    .term-cn {
+      font-size: 24px;
+      font-weight: 500;
+    }
+    .term-pinyin {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .term-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .term-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
   </style>
 </head>
-<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+<body>
 
-  <!-- Header -->
-  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
-          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
-          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
-        </a>
-        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ daoist-glossary</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="control-pill" role="toolbar" aria-label="Selector de idioma">
-          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
-            <span id="langToggleLabel">EN</span>
-          </button>
-        </div>
-        <a href="https://dakesu.net/novelas" class="text-xs text-neutral-400 hover:text-white transition-colors" data-i18n="nav_novels">
-          Volver a Novelas
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Contenido Principal -->
-  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+  <div class="page">
     
-    <div class="mb-8">
-      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2" data-i18n="tool4_title">
-        Diccionario de Términos Daoístas y Marciales
-      </h1>
-      <p class="text-neutral-400 text-xs sm:text-sm" data-i18n="tool4_desc">
-        Guía rápida de conceptos intraducibles: Dao, Dantian, Tribulación Celestial, Cara (Mianzi) y Píldoras Espirituales con pronunciación Pinyin.
-      </p>
+    <header class="top-bar">
+      <a href="/" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        <span>Tools</span>
+      </a>
+
+      <!-- Pill Switch Canónico (Mabelcox) -->
+      <div class="control-pill" role="toolbar" aria-label="Preferencias">
+        <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+          <span id="langToggleLabel">EN</span>
+        </button>
+
+        <span class="pill-divider" aria-hidden="true">/</span>
+
+        <button id="themeToggle" class="pill-btn pill-btn-icon" aria-label="Cambiar modo de color" title="Cambiar tema">
+          <svg class="sun-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" style="display:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-header">
+      <h1 class="app-title" data-i18n="dg_title">Glosario de Términos Daoístas</h1>
+      <p class="app-desc" data-i18n="tool4_desc">Conceptos esenciales de cultivo, filosofía taoísta y jerga de novelas marciales.</p>
     </div>
 
-    <!-- Buscador en Tiempo Real -->
-    <div class="mb-6">
-      <input type="text" id="searchBox" placeholder="Buscar término (ej. Dantian, Dao, Qi, Cara, Píldora)..." class="w-full bg-neutral-900 border border-neutral-800 text-neutral-200 text-xs sm:text-sm p-4 font-mono focus:outline-none focus:border-brand-500" />
+    <!-- Buscador -->
+    <div class="search-wrap">
+      <input type="text" id="searchBox" placeholder="Buscar concepto (ej. Dantian, Dao, Qi, Cara)..." data-i18n-ph="dg_search">
     </div>
 
     <!-- Lista de Términos -->
-    <div id="termsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"></div>
+    <div id="termsGrid" class="terms-grid"></div>
 
-    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
-    <div class="border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-      <div>
-        <p class="font-medium text-white mb-1" data-i18n="banner_title">¿Buscas algo nuevo que leer?</p>
-        <p class="text-neutral-400" data-i18n="banner_desc">Explora novelas traducidas de fantasía oriental en Dakesu.</p>
-      </div>
-      <a href="https://dakesu.net/novelas" class="text-brand-500 hover:text-white underline font-mono shrink-0">
-        dakesu.net/novelas &rarr;
-      </a>
-    </div>
-
-  </main>
-
-  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
-    <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
-  </footer>
+  </div>
 
   <script src="/shared/i18n.js"></script>
   <script>
@@ -114,89 +259,92 @@
         cn: "气",
         pinyin: "Qì / Ch'i",
         es: "Qi / Energía Vital",
-        en: "Qi / Vital Energy",
-        desc: "La energía primordial que compone y fluye a través del universo y todos los seres vivos. El fundamento de toda técnica de cultivo marcial."
+        en: "Qi / Vital Force",
+        desc_es: "La energía primordial que compone y fluye a través del cosmos. Base de toda técnica marcial e inmortal.",
+        desc_en: "The primordial breath and vital force circulating through the cosmos and living entities."
       },
       {
         cn: "丹田",
         pinyin: "Dān Tián",
         es: "Dantian / Campo de Cinabrio",
-        en: "Elixir Field / Core Basin",
-        desc: "Región energética del cuerpo (principalmente tres pulgadas bajo el ombligo) donde se almacena y refina el Qi espiritual."
+        en: "Dantian / Core Basin",
+        desc_es: "Núcleo energético corporal (bajo el ombligo) donde se almacena y destila el Qi espiritual.",
+        desc_en: "Energy nexus below the navel where internal spiritual Qi is refined and compressed."
       },
       {
         cn: "道",
         pinyin: "Dào / Tao",
         es: "El Dao / El Camino",
-        en: "The Way / Cosmic Law",
-        desc: "El orden natural y la verdad última del cosmos. Cada cultivador busca comprender su propio Dao (Dao de la Espada, Dao del Fuego, etc.)."
+        en: "The Dao / Cosmic Way",
+        desc_es: "El principio cósmico supremo. Cada cultivador persigue dominar su propia comprensión del Dao.",
+        desc_en: "The absolute order and source of reality. Cultivators seek personal resonance with its laws."
       },
       {
         cn: "面子",
         pinyin: "Miàn Zǐ",
         es: "Dar o Perder Cara (Mianzi)",
         en: "Face / Social Honor",
-        desc: "Reputación, prestigio y honor público. En novelas Xianxia, 'no dar cara' o 'perder cara' es el detonante del 90% de las batallas y vendettas de clanes."
+        desc_es: "Honor, orgullo y estatus público. No dar cara suele desatar guerras de clanes en novelas Xianxia.",
+        desc_en: "Honor, reputation, and public prestige. Losing face is the catalyst for endless vendettas."
       },
       {
         cn: "辟谷",
         pinyin: "Bì Gǔ",
-        es: "Bigu / Abstinencia de Granos",
-        en: "Grain Abstinence / Inedia",
-        desc: "Estado alcanzado por cultivadores avanzados donde dejan de consumir alimentos mortales y se nutren exclusivamente del Qi espiritual puro."
+        es: "Bigu / Inedia Espiritual",
+        en: "Bigu / Fasting from Grains",
+        desc_es: "Práctica taoísta de abstenerse de comida mortal para nutrir el cuerpo únicamente de Qi puro.",
+        desc_en: "Abstaining from mortal grain consumption, sustaining life purely via refined spiritual energy."
       },
       {
         cn: "走火入魔",
         pinyin: "Zǒu Huǒ Rù Mó",
         es: "Desviación del Qi (Zouhuo Rumo)",
-        en: "Qi Deviation / Demonic Possession",
-        desc: "Estado peligroso donde el Qi se descontrola en los meridianos, causado por impaciencia, traumas o demonios internos. Causa locura o explosión corporal."
+        en: "Qi Deviation",
+        desc_es: "Colapso donde el Qi se descontrola violentamente debido a obsesiones, traumas o demonios internos.",
+        desc_en: "Internal energy collapse and frenzy caused by impatience or psychological inner demons."
       },
       {
         cn: "天劫",
         pinyin: "Tiān Jié",
         es: "Tribulación Celestial",
         en: "Heavenly Tribulation",
-        desc: "Castigo o prueba cósmica enviada por la Voluntad Celestial para detener a quienes intentan desafiar las leyes naturales y alcanzar la inmortalidad."
+        desc_es: "Juicio de rayos enviado por la Voluntad Celestial contra quienes desafían el orden mortal.",
+        desc_en: "Cosmic lightning trials imposed by Heaven to filter mortals seeking immortal transcendence."
       },
       {
         cn: "储物袋",
         pinyin: "Chǔ Wù Dài",
-        es: "Bolsa de Almacenamiento Espacial",
-        en: "Spatial Storage Ring / Bag",
-        desc: "Artefacto que contiene una dimensión de bolsillo en su interior para transportar armas, píldoras y tesoros sin peso adicional."
+        es: "Bolsa Espacial de Jade",
+        en: "Spatial Storage Bag",
+        desc_es: "Artefacto con una dimensión de bolsillo interior para transportar tesoros y píldoras sin masa.",
+        desc_en: "Dimensional pocket artifact engineered to store items, pills, and armaments without weight."
       }
     ];
 
-    function renderTerms(filter = "") {
-      const q = filter.toLowerCase().trim();
-      const container = document.getElementById("termsGrid");
-      const matched = terms.filter(t => 
-        t.es.toLowerCase().includes(q) || 
-        t.en.toLowerCase().includes(q) || 
-        t.cn.includes(q) || 
-        t.pinyin.toLowerCase().includes(q) || 
-        t.desc.toLowerCase().includes(q)
-      );
+    function renderTerms(query = "") {
+      const q = query.toLowerCase().trim();
+      const grid = document.getElementById("termsGrid");
+      const isEs = currentLang === 'es';
 
-      if (matched.length === 0) {
-        container.innerHTML = `<div class="col-span-2 text-center text-xs font-mono text-neutral-500 py-8">No se encontraron términos coincidentes.</div>`;
+      const filtered = terms.filter(t => {
+        const textToSearch = `${t.cn} ${t.pinyin} ${t.es} ${t.en} ${t.desc_es} ${t.desc_en}`.toLowerCase();
+        return textToSearch.includes(q);
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1 / -1; color: var(--text-muted); font-size: 13px; padding: 24px 0;">${isEs ? 'No se encontraron conceptos coincidentes.' : 'No matching concepts found.'}</div>`;
         return;
       }
 
-      container.innerHTML = matched.map(t => `
-        <div class="border border-neutral-800 bg-neutral-900/40 p-5 hover:border-neutral-700 transition-colors">
-          <div class="flex items-baseline justify-between mb-2">
-            <span class="text-2xl font-serif font-bold text-white">${t.cn}</span>
-            <span class="text-xs font-mono text-brand-500">${t.pinyin}</span>
+      grid.innerHTML = filtered.map(t => `
+        <article class="term-card">
+          <div class="term-top">
+            <span class="term-cn">${t.cn}</span>
+            <span class="term-pinyin">${t.pinyin}</span>
           </div>
-          <h3 class="text-sm font-semibold text-neutral-200 mb-1">
-            ${t.es}
-          </h3>
-          <p class="text-xs text-neutral-400 leading-relaxed">
-            ${t.desc}
-          </p>
-        </div>
+          <h2 class="term-name">${isEs ? t.es : t.en}</h2>
+          <p class="term-desc">${isEs ? t.desc_es : t.desc_en}</p>
+        </article>
       `).join("");
     }
 
@@ -204,7 +352,8 @@
       renderTerms(e.target.value);
     });
 
-    renderTerms();
+    window.addEventListener('load', () => renderTerms());
+    window.addEventListener('dakesu:langchange', () => renderTerms(document.getElementById("searchBox").value));
   </script>
 </body>
 </html>

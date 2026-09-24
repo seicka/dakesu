@@ -1,197 +1,369 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conversor de Monedas de Novelas Fantásticas y Cultivo | Dakesu Tools</title>
-  <meta name="description" content="Calcula conversiones entre monedas de cobre, lingotes de plata, lingotes de oro y piedras espirituales de bajo, medio, alto y grado supremo.">
+  <title>Conversor de Monedas de Novelas · Dakesu Tools</title>
+  <meta name="description" content="Conversor canónico entre monedas de cobre, taels de plata, lingotes de oro y piedras espirituales taoístas.">
   <link rel="canonical" href="https://tools.dakesu.net/currency-converter">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              500: '#3E5CA4',
-              600: '#2E4378',
-              accent: '#E63946'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
   <style>
-    .control-pill {
+    :root {
+      --bg: #05070a;
+      --text: #f2ede4;
+      --text-muted: #807d8a;
+      --border: rgba(242, 237, 228, 0.12);
+      --hover-bg: rgba(242, 237, 228, 0.05);
+      --input-bg: #0d1017;
+      --pill-bg: rgba(255, 255, 255, 0.05);
+      --pill-border: rgba(255, 255, 255, 0.14);
+      --pill-hover-bg: rgba(255, 255, 255, 0.12);
+      --pill-text: rgba(255, 255, 255, 0.7);
+      --pill-text-active: #ffffff;
+      --accent: #e83424;
+    }
+
+    [data-theme="light"] {
+      --bg: #faf7f2;
+      --text: #17181c;
+      --text-muted: #72747d;
+      --border: rgba(0, 0, 0, 0.08);
+      --hover-bg: rgba(0, 0, 0, 0.03);
+      --input-bg: #ffffff;
+      --pill-bg: rgba(0, 0, 0, 0.04);
+      --pill-border: rgba(0, 0, 0, 0.1);
+      --pill-hover-bg: rgba(0, 0, 0, 0.08);
+      --pill-text: rgba(0, 0, 0, 0.65);
+      --pill-text-active: #000000;
+      --accent: #d32f2f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      min-height: 100%;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .back-link {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(8px);
-      font-family: monospace;
-      font-size: 11px;
+      transition: color 0.15s ease;
+    }
+    .back-link:hover { color: var(--text); }
+
+    /* Control Pill Canónico */
+    .control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 6px;
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--pill-border);
+      border-radius: 9999px;
+      font-size: 12px;
+      line-height: 1;
     }
     .pill-btn {
-      color: rgba(255, 255, 255, 0.7);
       background: transparent;
       border: none;
+      color: var(--pill-text);
+      padding: 4px 8px;
+      border-radius: 9999px;
       cursor: pointer;
-      padding: 0 4px;
+      font-size: 11px;
       font-weight: 600;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
     }
-    .pill-btn:hover { color: #fff; }
+    .pill-btn:hover { background: var(--pill-hover-bg); color: var(--pill-text-active); }
+    .pill-btn-icon { padding: 4px 6px; }
+    .pill-divider { color: var(--border); font-size: 11px; user-select: none; padding: 0 2px; }
+
+    /* Header */
+    .app-header {
+      margin-bottom: 32px;
+    }
+    .app-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .app-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Grid Layout */
+    .converter-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 650px) {
+      .converter-layout { grid-template-columns: 1fr; }
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      height: 40px;
+      background: var(--input-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 0 12px;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--text);
+    }
+
+    .rule-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-family: monospace;
+    }
+
+    /* Panel de Resultados */
+    .result-panel {
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .result-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .currency-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .currency-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .currency-label {
+      color: var(--text-muted);
+    }
+    .currency-val {
+      font-family: monospace;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .copy-btn {
+      align-self: flex-end;
+      background: transparent;
+      border: none;
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-top: 20px;
+      padding: 2px 4px;
+    }
+    .copy-btn:hover { color: var(--text); }
   </style>
 </head>
-<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+<body>
 
-  <!-- Header -->
-  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
-          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
-          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
-        </a>
-        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ currency-converter</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="control-pill" role="toolbar" aria-label="Selector de idioma">
-          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
-            <span id="langToggleLabel">EN</span>
-          </button>
-        </div>
-        <a href="https://dakesu.net/novelas" class="text-xs text-neutral-400 hover:text-white transition-colors" data-i18n="nav_novels">
-          Volver a Novelas
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Contenido Principal -->
-  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+  <div class="page">
     
-    <div class="mb-8">
-      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2" data-i18n="tool5_title">
-        Conversor de Monedas de Novelas Fantásticas
-      </h1>
-      <p class="text-neutral-400 text-xs sm:text-sm" data-i18n="tool5_desc">
-        Convierte entre Monedas de Cobre, Lingotes de Plata, Oro y Piedras de Espíritu (Bajo, Medio y Alto Grado).
-      </p>
+    <header class="top-bar">
+      <a href="/" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        <span>Tools</span>
+      </a>
+
+      <!-- Pill Switch Canónico (Mabelcox) -->
+      <div class="control-pill" role="toolbar" aria-label="Preferencias">
+        <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+          <span id="langToggleLabel">EN</span>
+        </button>
+
+        <span class="pill-divider" aria-hidden="true">/</span>
+
+        <button id="themeToggle" class="pill-btn pill-btn-icon" aria-label="Cambiar modo de color" title="Cambiar tema">
+          <svg class="sun-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" style="display:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-header">
+      <h1 class="app-title" data-i18n="cc_title">Conversor de Monedas</h1>
+      <p class="app-desc" data-i18n="tool5_desc">Equivalencias canónicas entre monedas mortales e inmortales en novelas de cultivo.</p>
     </div>
 
-    <!-- Conversor Card -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-      
-      <!-- Entrada -->
-      <div class="border border-neutral-800 bg-neutral-900/40 p-6 space-y-4">
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Cantidad</label>
-          <input type="number" id="inputAmount" value="100" min="1" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-lg p-3 font-mono focus:outline-none focus:border-brand-500" />
+    <div class="converter-layout">
+      <!-- Entradas -->
+      <div>
+        <div class="form-group">
+          <label data-i18n="cc_amount">Cantidad</label>
+          <input type="number" id="inputAmount" value="100" min="1">
         </div>
 
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Moneda de Origen</label>
-          <select id="sourceCurrency" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 font-mono focus:outline-none focus:border-brand-500">
-            <optgroup label="Monedas Mortales">
-              <option value="copper">Monedas de Cobre (Wen / 铜钱)</option>
-              <option value="silver">Lingotes de Plata (Tael / 白银)</option>
-              <option value="gold" selected>Lingotes de Oro (Jin / 黄金)</option>
-            </optgroup>
-            <optgroup label="Monedas Inmortales (Piedras de Espíritu)">
-              <option value="ls_low">Piedras Espirituales de Grado Bajo (下品灵石)</option>
-              <option value="ls_mid">Piedras Espirituales de Grado Medio (中品灵石)</option>
-              <option value="ls_high">Piedras Espirituales de Grado Alto (上品灵石)</option>
-              <option value="ls_top">Piedras Espirituales de Grado Supremo (极品灵石)</option>
-            </optgroup>
+        <div class="form-group">
+          <label>Moneda de Origen</label>
+          <select id="sourceCurrency">
+            <option value="copper">Cobre (Wen / 铜钱)</option>
+            <option value="silver">Plata (Tael / 白银)</option>
+            <option value="gold" selected>Oro (Jin / 黄金)</option>
+            <option value="ls_low">Piedra Espíritu Baja (下品灵石)</option>
+            <option value="ls_mid">Piedra Espíritu Media (中品灵石)</option>
+            <option value="ls_high">Piedra Espíritu Alta (上品灵石)</option>
+            <option value="ls_top">Piedra Espíritu Suprema (极品灵石)</option>
           </select>
         </div>
 
-        <div class="p-3 bg-neutral-950 border border-neutral-800/80 text-[11px] text-neutral-500 font-mono">
-          <strong>Regla canónica:</strong> 1.000 Cobres = 1 Plata · 10 Platas = 1 Oro · 100 Oros = 1 Piedra de Grado Bajo · Tasa 100:1 entre grados de piedras.
+        <div class="rule-note">
+          1.000 Cobre = 1 Plata<br>
+          10 Plata = 1 Oro<br>
+          100 Oro = 1 Piedra Baja<br>
+          Tasa 100:1 entre piedras espirituales
         </div>
       </div>
 
-      <!-- Salida / Resultados -->
-      <div class="border border-neutral-800 bg-neutral-900/60 p-6 flex flex-col justify-between">
+      <!-- Resultados -->
+      <div class="result-panel">
         <div>
-          <span class="text-xs font-mono text-brand-500 uppercase tracking-wider block mb-4">Equivalencias Calculadas</span>
+          <div class="result-title">Equivalencias Calculadas</div>
           
-          <div class="space-y-3 font-mono text-xs">
-            <div class="flex justify-between border-b border-neutral-800 pb-2">
-              <span class="text-neutral-400">Monedas de Cobre:</span>
-              <span class="text-white font-bold" id="outCopper">0</span>
+          <div class="currency-list">
+            <div class="currency-row">
+              <span class="currency-label">Cobre</span>
+              <span class="currency-val" id="outCopper">0</span>
             </div>
-            <div class="flex justify-between border-b border-neutral-800 pb-2">
-              <span class="text-neutral-400">Lingotes de Plata:</span>
-              <span class="text-white font-bold" id="outSilver">0</span>
+            <div class="currency-row">
+              <span class="currency-label">Plata</span>
+              <span class="currency-val" id="outSilver">0</span>
             </div>
-            <div class="flex justify-between border-b border-neutral-800 pb-2">
-              <span class="text-neutral-400">Lingotes de Oro:</span>
-              <span class="text-white font-bold" id="outGold">0</span>
+            <div class="currency-row">
+              <span class="currency-label">Oro</span>
+              <span class="currency-val" id="outGold">0</span>
             </div>
-            <div class="flex justify-between border-b border-neutral-800 pb-2">
-              <span class="text-neutral-400">Piedras Grado Bajo:</span>
-              <span class="text-brand-500 font-bold" id="outLow">0</span>
+            <div class="currency-row">
+              <span class="currency-label">Piedra Baja</span>
+              <span class="currency-val" id="outLow">0</span>
             </div>
-            <div class="flex justify-between border-b border-neutral-800 pb-2">
-              <span class="text-neutral-400">Piedras Grado Medio:</span>
-              <span class="text-brand-500 font-bold" id="outMid">0</span>
+            <div class="currency-row">
+              <span class="currency-label">Piedra Media</span>
+              <span class="currency-val" id="outMid">0</span>
             </div>
-            <div class="flex justify-between border-b border-neutral-800 pb-2">
-              <span class="text-neutral-400">Piedras Grado Alto:</span>
-              <span class="text-brand-500 font-bold" id="outHigh">0</span>
+            <div class="currency-row">
+              <span class="currency-label">Piedra Alta</span>
+              <span class="currency-val" id="outHigh">0</span>
             </div>
-            <div class="flex justify-between pt-1">
-              <span class="text-neutral-400">Piedras Grado Supremo:</span>
-              <span class="text-white font-bold" id="outTop">0</span>
+            <div class="currency-row" style="border-bottom:none;">
+              <span class="currency-label">Piedra Suprema</span>
+              <span class="currency-val" id="outTop">0</span>
             </div>
           </div>
         </div>
 
-        <button onclick="navigator.clipboard.writeText('Conversión calculada en Dakesu Tools'); this.innerText = 'Copiado';" class="mt-6 text-xs text-neutral-400 hover:text-white font-mono self-end">
-          Copiar desglose
-        </button>
+        <button id="copyBtn" class="copy-btn" data-i18n="an_copy">Copiar</button>
       </div>
-
     </div>
 
-    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
-    <div class="border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-      <div>
-        <p class="font-medium text-white mb-1" data-i18n="banner_title">¿Buscas algo nuevo que leer?</p>
-        <p class="text-neutral-400" data-i18n="banner_desc">Explora novelas de fantasía y cultivo taoísta en Dakesu.</p>
-      </div>
-      <a href="https://dakesu.net/novelas" class="text-brand-500 hover:text-white underline font-mono shrink-0">
-        dakesu.net/novelas &rarr;
-      </a>
-    </div>
-
-  </main>
-
-  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
-    <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
-  </footer>
+  </div>
 
   <script src="/shared/i18n.js"></script>
   <script>
-    // Valor base en "Monedas de Cobre"
     const RATES = {
       copper: 1,
       silver: 1000,
       gold: 10000,
-      ls_low: 1000000,          // 100 Oros = 1 Piedra Baja
-      ls_mid: 100000000,        // 100 Bajas = 1 Media
-      ls_high: 10000000000,     // 100 Medias = 1 Alta
-      ls_top: 1000000000000     // 100 Altas = 1 Suprema
+      ls_low: 1000000,
+      ls_mid: 100000000,
+      ls_high: 10000000000,
+      ls_top: 1000000000000
     };
 
     function convert() {
       const amount = parseFloat(document.getElementById('inputAmount').value) || 0;
       const src = document.getElementById('sourceCurrency').value;
-
       const totalCopper = amount * (RATES[src] || 1);
 
       document.getElementById('outCopper').innerText = totalCopper.toLocaleString();
@@ -206,7 +378,16 @@
     document.getElementById('inputAmount').addEventListener('input', convert);
     document.getElementById('sourceCurrency').addEventListener('change', convert);
 
-    convert();
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      const text = `Cobre: ${document.getElementById('outCopper').innerText} | Oro: ${document.getElementById('outGold').innerText} | Piedras Bajas: ${document.getElementById('outLow').innerText}`;
+      navigator.clipboard.writeText(text);
+      this.innerText = currentLang === 'es' ? '¡Copiado!' : 'Copied!';
+      setTimeout(() => {
+        this.innerText = currentLang === 'es' ? 'Copiar' : 'Copy';
+      }, 1800);
+    });
+
+    window.addEventListener('load', convert);
   </script>
 </body>
 </html>

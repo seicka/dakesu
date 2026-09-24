@@ -1,179 +1,370 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Ritmo de Lectura Wuxia y Webnovels | Dakesu Tools</title>
-  <meta name="description" content="Calcula cuánto tiempo tardarás en leer novelas masivas de 1.000 a 4.000 capítulos. Estima días y horas según tu velocidad WPM y tiempo diario.">
+  <title>Calculadora de Ritmo de Lectura · Dakesu Tools</title>
+  <meta name="description" content="Calcula con precisión horas y días para terminar novelas de 1.000 a 4.000 capítulos según velocidad WPM.">
   <link rel="canonical" href="https://tools.dakesu.net/reading-speed">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              500: '#3E5CA4',
-              600: '#2E4378',
-              accent: '#E63946'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
   <style>
-    .control-pill {
+    :root {
+      --bg: #05070a;
+      --text: #f2ede4;
+      --text-muted: #807d8a;
+      --border: rgba(242, 237, 228, 0.12);
+      --hover-bg: rgba(242, 237, 228, 0.05);
+      --input-bg: #0d1017;
+      --pill-bg: rgba(255, 255, 255, 0.05);
+      --pill-border: rgba(255, 255, 255, 0.14);
+      --pill-hover-bg: rgba(255, 255, 255, 0.12);
+      --pill-text: rgba(255, 255, 255, 0.7);
+      --pill-text-active: #ffffff;
+      --accent: #e83424;
+    }
+
+    [data-theme="light"] {
+      --bg: #faf7f2;
+      --text: #17181c;
+      --text-muted: #72747d;
+      --border: rgba(0, 0, 0, 0.08);
+      --hover-bg: rgba(0, 0, 0, 0.03);
+      --input-bg: #ffffff;
+      --pill-bg: rgba(0, 0, 0, 0.04);
+      --pill-border: rgba(0, 0, 0, 0.1);
+      --pill-hover-bg: rgba(0, 0, 0, 0.08);
+      --pill-text: rgba(0, 0, 0, 0.65);
+      --pill-text-active: #000000;
+      --accent: #d32f2f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      min-height: 100%;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+
+    .back-link {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(8px);
-      font-family: monospace;
-      font-size: 11px;
+      transition: color 0.15s ease;
+    }
+    .back-link:hover { color: var(--text); }
+
+    /* Control Pill Canónico */
+    .control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 6px;
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--pill-border);
+      border-radius: 9999px;
+      font-size: 12px;
+      line-height: 1;
     }
     .pill-btn {
-      color: rgba(255, 255, 255, 0.7);
       background: transparent;
       border: none;
+      color: var(--pill-text);
+      padding: 4px 8px;
+      border-radius: 9999px;
       cursor: pointer;
-      padding: 0 4px;
+      font-size: 11px;
       font-weight: 600;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
     }
-    .pill-btn:hover { color: #fff; }
+    .pill-btn:hover { background: var(--pill-hover-bg); color: var(--pill-text-active); }
+    .pill-btn-icon { padding: 4px 6px; }
+    .pill-divider { color: var(--border); font-size: 11px; user-select: none; padding: 0 2px; }
+
+    /* Header */
+    .app-header {
+      margin-bottom: 32px;
+    }
+    .app-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .app-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Grid Layout */
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 650px) {
+      .calc-layout { grid-template-columns: 1fr; }
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      height: 40px;
+      background: var(--input-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 0 12px;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    input[type="number"]:focus, select:focus {
+      border-color: var(--text);
+    }
+
+    .slider-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-family: monospace;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--text);
+      margin-top: 4px;
+    }
+
+    /* Panel de Resultados */
+    .result-panel {
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+    .metric-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .metric-val {
+      font-size: 18px;
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .highlight-box {
+      margin-bottom: 20px;
+    }
+    .highlight-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .highlight-days {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .highlight-verdict {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .panel-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .copy-btn {
+      background: transparent;
+      border: none;
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px 4px;
+    }
+    .copy-btn:hover { color: var(--text); }
   </style>
 </head>
-<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+<body>
 
-  <!-- Header -->
-  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
-          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
-          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
-        </a>
-        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ reading-speed</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <div class="control-pill" role="toolbar" aria-label="Selector de idioma">
-          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
-            <span id="langToggleLabel">EN</span>
-          </button>
-        </div>
-        <a href="https://dakesu.net/novelas" class="text-xs text-neutral-400 hover:text-white transition-colors" data-i18n="nav_novels">
-          Volver a Novelas
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- Contenido Principal -->
-  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+  <div class="page">
     
-    <div class="mb-8">
-      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2" data-i18n="tool2_title">
-        Calculadora de Ritmo de Lectura Wuxia
-      </h1>
-      <p class="text-neutral-400 text-xs sm:text-sm" data-i18n="tool2_desc">
-        Calcula días y horas para terminar novelas masivas de 2.000+ capítulos según tu velocidad WPM y tiempo diario disponible.
-      </p>
+    <header class="top-bar">
+      <a href="/" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        <span>Tools</span>
+      </a>
+
+      <!-- Pill Switch Canónico (Mabelcox) -->
+      <div class="control-pill" role="toolbar" aria-label="Preferencias">
+        <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+          <span id="langToggleLabel">EN</span>
+        </button>
+
+        <span class="pill-divider" aria-hidden="true">/</span>
+
+        <button id="themeToggle" class="pill-btn pill-btn-icon" aria-label="Cambiar modo de color" title="Cambiar tema">
+          <svg class="sun-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" style="display:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-header">
+      <h1 class="app-title" data-i18n="rs_title">Calculadora de Ritmo de Lectura</h1>
+      <p class="app-desc" data-i18n="tool2_desc">Calcula días y horas para novelas extensas según tu ritmo de lectura y tiempo diario.</p>
     </div>
 
-    <!-- Calculadora Interactiva -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-      
-      <!-- Panel de Controles -->
-      <div class="border border-neutral-800 bg-neutral-900/40 p-6 space-y-5">
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Total de Capítulos</label>
-          <input type="number" id="totalChapters" value="1600" min="1" max="10000" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-sm p-3 font-mono focus:outline-none focus:border-brand-500" />
-          <span class="text-[10px] text-neutral-500 mt-1 block">Ejemplos: Martial Peak (6000), Coiling Dragon (800), ISSTH (1614)</span>
+    <div class="calc-layout">
+      <!-- Controles -->
+      <div>
+        <div class="form-group">
+          <label data-i18n="rs_chapters">Capítulos Totales</label>
+          <input type="number" id="totalChapters" value="1600" min="1" max="10000">
         </div>
 
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Palabras por Capítulo (Promedio)</label>
-          <input type="number" id="wordsPerChapter" value="2200" min="500" max="10000" step="100" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-sm p-3 font-mono focus:outline-none focus:border-brand-500" />
-          <span class="text-[10px] text-neutral-500 mt-1 block">Estándar webnovel: 2.000 a 2.500 palabras</span>
+        <div class="form-group">
+          <label data-i18n="rs_wpc">Palabras por Capítulo</label>
+          <input type="number" id="wordsPerChapter" value="2200" min="500" max="10000" step="100">
         </div>
 
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Velocidad de Lectura (Palabras / minuto)</label>
-          <input type="range" id="wpmSlider" min="150" max="600" value="250" class="w-full accent-brand-500" />
-          <div class="flex justify-between text-xs font-mono text-neutral-400 mt-1">
-            <span>Tranquilo (180 WPM)</span>
-            <span id="wpmValue" class="text-white font-bold">250 WPM</span>
-            <span>Rápido (450 WPM)</span>
+        <div class="form-group">
+          <label data-i18n="rs_wpm">Velocidad (Palabras por minuto)</label>
+          <input type="range" id="wpmSlider" min="150" max="500" value="250">
+          <div class="slider-row">
+            <span>150</span>
+            <span id="wpmDisplay" style="color:var(--text);font-weight:600;">250 WPM</span>
+            <span>500</span>
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Tiempo de Lectura Diario</label>
-          <select id="dailyTime" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 font-mono focus:outline-none focus:border-brand-500">
-            <option value="0.5">30 minutos / día</option>
-            <option value="1">1 hora / día</option>
-            <option value="2" selected>2 horas / día (Lector habitual)</option>
-            <option value="4">4 horas / día (Maratón)</option>
-            <option value="6">6 horas / día (Fanático del cultivo)</option>
+        <div class="form-group">
+          <label data-i18n="rs_daily">Dedicación Diaria</label>
+          <select id="dailyTime">
+            <option value="0.5">30 min / día</option>
+            <option value="1">1 h / día</option>
+            <option value="2" selected>2 h / día</option>
+            <option value="4">4 h / día</option>
+            <option value="6">6 h / día</option>
           </select>
         </div>
       </div>
 
-      <!-- Panel de Métricas / Resultados -->
-      <div class="border border-neutral-800 bg-neutral-900/60 p-6 flex flex-col justify-between">
+      <!-- Métricas -->
+      <div class="result-panel">
         <div>
-          <span class="text-xs font-mono text-brand-500 uppercase tracking-wider block mb-4">Estimación Calculada</span>
-          
-          <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="border-b border-neutral-800 pb-3">
-              <span class="text-[11px] font-mono text-neutral-400 uppercase block mb-1">Palabras Totales</span>
-              <span id="metricWords" class="text-xl font-mono font-bold text-white">3.52M</span>
+          <div class="metric-row">
+            <div>
+              <div class="metric-label">Palabras Totales</div>
+              <div class="metric-val" id="metricWords">3.52M</div>
             </div>
-            <div class="border-b border-neutral-800 pb-3">
-              <span class="text-[11px] font-mono text-neutral-400 uppercase block mb-1">Horas Totales</span>
-              <span id="metricHours" class="text-xl font-mono font-bold text-white">234.6 h</span>
+            <div>
+              <div class="metric-label">Horas Totales</div>
+              <div class="metric-val" id="metricHours">234.6 h</div>
             </div>
           </div>
 
-          <div class="bg-neutral-950 border border-neutral-800/80 p-5 mb-6">
-            <span class="text-xs text-neutral-400 block mb-1">Tiempo para completar:</span>
-            <div class="text-3xl font-mono font-black text-brand-500 tracking-tight" id="metricDays">
-              117 Días
-            </div>
-            <p class="text-[11px] text-neutral-500 mt-2" id="metricVerdict">
-              Aproximadamente 3.9 meses a tu ritmo actual.
-            </p>
+          <div class="highlight-box">
+            <div class="highlight-label" data-i18n="rs_result_time">Tiempo total estimado:</div>
+            <div class="highlight-days" id="metricDays">117 Días</div>
+            <div class="highlight-verdict" id="metricVerdict">Aproximadamente 3.9 meses a este ritmo.</div>
           </div>
         </div>
 
-        <div class="pt-4 border-t border-neutral-800 text-xs text-neutral-500 flex items-center justify-between">
-          <span>Equivalente: <strong class="text-neutral-300" id="metricBooks">~28 libros estándar</strong></span>
-          <button onclick="navigator.clipboard.writeText(document.getElementById('metricDays').innerText); this.innerText = 'Copiado';" class="text-neutral-400 hover:text-white font-mono">
-            Copiar resultado
-          </button>
+        <div class="panel-footer">
+          <span id="metricBooks">~28 libros estándar</span>
+          <button id="copyBtn" class="copy-btn" data-i18n="an_copy">Copiar</button>
         </div>
       </div>
-
     </div>
 
-    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
-    <div class="border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-      <div>
-        <p class="font-medium text-white mb-1" data-i18n="banner_title">¿Buscas algo nuevo que leer?</p>
-        <p class="text-neutral-400" data-i18n="banner_desc">Explora novelas ligeras y webnovels asiáticas traducidas con formato limpio.</p>
-      </div>
-      <a href="https://dakesu.net/novelas" class="text-brand-500 hover:text-white underline font-mono shrink-0">
-        dakesu.net/novelas &rarr;
-      </a>
-    </div>
-
-  </main>
-
-  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
-    <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
-  </footer>
+  </div>
 
   <script src="/shared/i18n.js"></script>
   <script>
@@ -183,7 +374,7 @@
       const wpm = parseInt(document.getElementById('wpmSlider').value, 10) || 250;
       const dailyHours = parseFloat(document.getElementById('dailyTime').value) || 2;
 
-      document.getElementById('wpmValue').innerText = wpm + ' WPM';
+      document.getElementById('wpmDisplay').innerText = wpm + ' WPM';
 
       const totalWords = chapters * wpc;
       const totalMinutes = totalWords / wpm;
@@ -192,14 +383,20 @@
 
       document.getElementById('metricWords').innerText = (totalWords / 1000000).toFixed(2) + 'M';
       document.getElementById('metricHours').innerText = totalHours.toFixed(1) + ' h';
-      document.getElementById('metricDays').innerText = totalDays + ' Días';
+      
+      const daySuffix = currentLang === 'es' ? 'Días' : 'Days';
+      document.getElementById('metricDays').innerText = `${totalDays} ${daySuffix}`;
 
       const months = (totalDays / 30.5).toFixed(1);
-      document.getElementById('metricVerdict').innerText = `Aproximadamente ${months} meses leyendo ${dailyHours} hora(s) al día.`;
-
-      // 1 libro estándar ≈ 100,000 palabras
-      const booksEquiv = Math.round(totalWords / 100000);
-      document.getElementById('metricBooks').innerText = `~${booksEquiv} libros estándar`;
+      if (currentLang === 'es') {
+        document.getElementById('metricVerdict').innerText = `Aproximadamente ${months} meses leyendo ${dailyHours} hora(s) al día.`;
+        const books = Math.round(totalWords / 100000);
+        document.getElementById('metricBooks').innerText = `~${books} libros estándar`;
+      } else {
+        document.getElementById('metricVerdict').innerText = `Approximately ${months} months reading ${dailyHours} hour(s) per day.`;
+        const books = Math.round(totalWords / 100000);
+        document.getElementById('metricBooks').innerText = `~${books} standard books`;
+      }
     }
 
     document.getElementById('totalChapters').addEventListener('input', calculate);
@@ -207,7 +404,16 @@
     document.getElementById('wpmSlider').addEventListener('input', calculate);
     document.getElementById('dailyTime').addEventListener('change', calculate);
 
-    calculate();
+    document.getElementById('copyBtn').addEventListener('click', function() {
+      navigator.clipboard.writeText(document.getElementById('metricDays').innerText);
+      this.innerText = currentLang === 'es' ? '¡Copiado!' : 'Copied!';
+      setTimeout(() => {
+        this.innerText = currentLang === 'es' ? 'Copiar' : 'Copy';
+      }, 1800);
+    });
+
+    window.addEventListener('load', calculate);
+    window.addEventListener('dakesu:langchange', calculate);
   </script>
 </body>
 </html>

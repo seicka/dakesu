@@ -1,317 +1,454 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-[#030304] text-[#EDEDED] antialiased">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Herramientas y Recursos para Lectores y Creadores | Dakesu</title>
-  <meta name="description" content="Suite de mini herramientas gratuitas para fanáticos de novelas asiáticas, wuxia, manhwa y fantasía oriental. Generadores, convertidores y utilidades sin registro.">
+  <title>Dakesu Tools</title>
+  <meta name="description" content="Herramientas y utilidades rápidas para fanáticos de novelas asiáticas.">
   <link rel="canonical" href="https://tools.dakesu.net/">
-  <meta property="og:title" content="Herramientas y Recursos | Dakesu">
-  <meta property="og:description" content="Mini-apps gratuitas para lectores de novelas asiáticas y creadores de contenido.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://tools.dakesu.net/">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-            serif: ['Cinzel', 'Georgia', 'serif'],
-            mono: ['"JetBrains Mono"', 'monospace'],
-          },
-          colors: {
-            canvas: '#030304',
-            surface: {
-              1: '#0B0C0E',
-              2: '#111317',
-              3: '#181B20',
-            },
-            hairline: {
-              subtle: 'rgba(255, 255, 255, 0.07)',
-              strong: 'rgba(255, 255, 255, 0.15)',
-            },
-            ink: {
-              primary: '#EDEDED',
-              secondary: '#A1A7B4',
-              muted: '#636A79',
-            },
-            jade: {
-              500: '#10B981',
-              400: '#34D399',
-              dim: 'rgba(16, 185, 129, 0.12)',
-            },
-            crimson: {
-              500: '#E11D48',
-              dim: 'rgba(225, 29, 72, 0.12)',
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
   <style>
-    /* Cuadrícula técnica de fondo con desvanecimiento radial central estricto */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-      background-size: 32px 32px;
-      mask-image: radial-gradient(circle at 50% 20%, transparent 10%, black 85%);
-      -webkit-mask-image: radial-gradient(circle at 50% 20%, transparent 10%, black 85%);
-      pointer-events: none;
-      z-index: 0;
+    /* ================================================= Tokens Mabelcox / Torii Clean */
+    :root {
+      --bg: #05070a;
+      --text: #f2ede4;
+      --text-muted: #807d8a;
+      --border: rgba(242, 237, 228, 0.12);
+      --hover-bg: rgba(242, 237, 228, 0.05);
+      --pill-bg: rgba(255, 255, 255, 0.05);
+      --pill-border: rgba(255, 255, 255, 0.14);
+      --pill-hover-bg: rgba(255, 255, 255, 0.12);
+      --pill-text: rgba(255, 255, 255, 0.7);
+      --pill-text-active: #ffffff;
+      --accent: #e83424;
     }
 
-    /* Control Pill Canónico SeiqOS */
+    [data-theme="light"] {
+      --bg: #faf7f2;
+      --text: #17181c;
+      --text-muted: #72747d;
+      --border: rgba(0, 0, 0, 0.08);
+      --hover-bg: rgba(0, 0, 0, 0.03);
+      --pill-bg: rgba(0, 0, 0, 0.04);
+      --pill-border: rgba(0, 0, 0, 0.1);
+      --pill-hover-bg: rgba(0, 0, 0, 0.08);
+      --pill-text: rgba(0, 0, 0, 0.65);
+      --pill-text-active: #000000;
+      --accent: #d32f2f;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      height: 100%;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      overflow-x: hidden;
+    }
+
+    /* Fondo Torii 3D Canvas */
+    #gl {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.85;
+      transition: opacity 0.3s ease;
+    }
+    [data-theme="light"] #gl {
+      opacity: 0.2;
+      filter: invert(1) hue-rotate(180deg);
+    }
+
+    .page {
+      position: relative;
+      z-index: 10;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* Top Bar Simple */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 64px;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    /* Control Pill Canónico Mabelcox */
     .control-pill {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      padding: 3px 8px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(17, 19, 23, 0.7);
-      backdrop-filter: blur(12px);
-      font-family: "JetBrains Mono", monospace;
-      font-size: 11px;
+      gap: 3px;
+      padding: 3px 6px;
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--pill-border);
+      border-radius: 9999px;
+      font-size: 12px;
+      line-height: 1;
     }
+
     .pill-btn {
-      color: #A1A7B4;
       background: transparent;
       border: none;
+      color: var(--pill-text);
+      padding: 4px 8px;
+      border-radius: 9999px;
       cursor: pointer;
-      padding: 0 4px;
-      font-weight: 500;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .pill-btn:hover {
+      background: var(--pill-hover-bg);
+      color: var(--pill-text-active);
+    }
+
+    .pill-btn:active {
+      transform: scale(0.96);
+    }
+
+    .pill-btn-icon {
+      padding: 4px 6px;
+    }
+
+    .pill-divider {
+      color: var(--border);
+      font-size: 11px;
+      user-select: none;
+      padding: 0 2px;
+    }
+
+    /* Lista Limpia de Herramientas: Solo Icono + Nombre + Link */
+    .tools-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .tool-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--bg);
+      text-decoration: none;
+      color: var(--text);
+      transition: background-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .tool-row:hover {
+      background: var(--hover-bg);
+    }
+
+    .tool-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .tool-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--text-muted);
+      stroke-width: 1.75;
+      flex-shrink: 0;
       transition: color 0.15s ease;
     }
-    .pill-btn:hover { color: #EDEDED; }
 
-    /* Bento Card Precision Layer */
-    .bento-card {
-      background: linear-gradient(180deg, rgba(17, 19, 23, 0.75) 0%, rgba(11, 12, 14, 0.95) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      transition: border-color 0.2s ease, transform 0.2s ease;
+    .tool-row:hover .tool-icon {
+      color: var(--accent);
     }
-    .bento-card:hover {
-      border-color: rgba(255, 255, 255, 0.18);
-      transform: translateY(-1px);
+
+    .tool-name {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .arrow-icon {
+      width: 15px;
+      height: 15px;
+      color: var(--text-muted);
+      stroke-width: 1.5;
+      transition: transform 0.15s ease, color 0.15s ease;
+    }
+
+    .tool-row:hover .arrow-icon {
+      color: var(--text);
+      transform: translateX(3px);
+    }
+
+    /* Footer Minimalista */
+    .footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .footer a:hover {
+      color: var(--text);
     }
   </style>
 </head>
-<body class="min-h-full flex flex-col font-sans selection:bg-jade-500 selection:text-black relative">
+<body>
 
-  <!-- Header Canónico de Precisión -->
-  <header class="border-b border-hairline-subtle bg-canvas/80 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="https://dakesu.net" class="flex items-center gap-2.5 text-ink-primary font-semibold tracking-tight text-base hover:text-white transition-colors">
-          <span class="w-6 h-6 border border-hairline-strong bg-surface-2 text-ink-primary flex items-center justify-center text-[11px] font-mono font-bold">D</span>
-          <span class="font-serif tracking-wider text-sm">DAKESU<span class="text-ink-muted font-mono text-xs font-normal">/tools</span></span>
+  <!-- WebGL Torii 3D Limpio -->
+  <canvas id="gl"></canvas>
+
+  <div class="page">
+    
+    <!-- Top Bar con Control Pill Canónico -->
+    <header class="top-bar">
+      <a href="https://dakesu.net" class="brand-title" data-i18n="site_name">Dakesu Tools</a>
+
+      <!-- Pill Switch Canónico (Mabelcox) -->
+      <div class="control-pill" role="toolbar" aria-label="Preferencias de visualización">
+        <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+          <span id="langToggleLabel">EN</span>
+        </button>
+
+        <span class="pill-divider" aria-hidden="true">/</span>
+
+        <button id="themeToggle" class="pill-btn pill-btn-icon" aria-label="Cambiar modo de color" title="Cambiar tema">
+          <!-- Sol (Visible en Dark) -->
+          <svg class="sun-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Luna (Visible en Light) -->
+          <svg class="moon-icon" style="display:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Lista Ultra-Limpia: Icono SVG + Nombre + Flecha -->
+    <main>
+      <div class="tools-list">
+        
+        <!-- Tool 1: Asian Names -->
+        <a href="/asian-names" class="tool-row">
+          <div class="tool-left">
+            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+            </svg>
+            <span class="tool-name" data-i18n="tool1_name">Generador de Nombres Asiáticos</span>
+          </div>
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
         </a>
-        <span class="hidden sm:inline-block text-[10px] font-mono text-ink-muted border border-hairline-subtle px-1.5 py-0.5" data-i18n="site_tagline">SUITE CLIENT-SIDE</span>
+
+        <!-- Tool 2: Reading Speed -->
+        <a href="/reading-speed" class="tool-row">
+          <div class="tool-left">
+            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="tool-name" data-i18n="tool2_name">Calculadora de Ritmo de Lectura</span>
+          </div>
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </a>
+
+        <!-- Tool 3: Cultivation Realms -->
+        <a href="/cultivation-realms" class="tool-row">
+          <div class="tool-left">
+            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5" />
+            </svg>
+            <span class="tool-name" data-i18n="tool3_name">Reinos de Cultivo Xianxia</span>
+          </div>
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </a>
+
+        <!-- Tool 4: Daoist Glossary -->
+        <a href="/daoist-glossary" class="tool-row">
+          <div class="tool-left">
+            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <span class="tool-name" data-i18n="tool4_name">Diccionario de Términos Daoístas</span>
+          </div>
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </a>
+
+        <!-- Tool 5: Currency Converter -->
+        <a href="/currency-converter" class="tool-row">
+          <div class="tool-left">
+            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="tool-name" data-i18n="tool5_name">Conversor de Monedas Fantásticas</span>
+          </div>
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </a>
+
+        <!-- Tool 6: Sect Generator -->
+        <a href="/sect-generator" class="tool-row">
+          <div class="tool-left">
+            <svg class="tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
+            </svg>
+            <span class="tool-name" data-i18n="tool6_name">Generador de Sectas y Clanes</span>
+          </div>
+          <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </a>
+
       </div>
+    </main>
 
-      <div class="flex items-center gap-4">
-        <!-- Control Pill Canónico de Idioma -->
-        <div class="control-pill" role="toolbar" aria-label="Selector de idioma">
-          <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
-            <span id="langToggleLabel">EN</span>
-          </button>
-        </div>
-
-        <nav class="hidden md:flex items-center gap-5 text-xs font-medium border-l border-hairline-subtle pl-4">
-          <a href="https://dakesu.net/novelas" class="text-ink-secondary hover:text-ink-primary transition-colors" data-i18n="nav_novels">Leer Novelas</a>
-          <a href="https://dakesu.net" class="text-ink-secondary hover:text-ink-primary transition-colors" data-i18n="nav_portal">Portal Principal</a>
-        </nav>
+    <!-- Footer Simple -->
+    <footer class="footer">
+      <span data-i18n="footer_copy">&copy; 2026 Dakesu. Utilidades sin registro.</span>
+      <div style="display:flex; gap:16px;">
+        <a href="https://dakesu.net" data-i18n="nav_novels">Novelas</a>
+        <a href="https://seicka.net">seicka.net</a>
       </div>
-    </div>
-  </header>
+    </footer>
 
-  <!-- Hero Editorial: Escala Tipográfica Intencional -->
-  <main class="flex-1 max-w-6xl mx-auto px-4 py-16 w-full relative z-10">
-    <div class="max-w-3xl mb-16">
-      <div class="inline-flex items-center gap-2 mb-4">
-        <span class="w-1.5 h-1.5 bg-jade-500"></span>
-        <span class="text-[11px] font-mono uppercase tracking-widest text-jade-400 font-semibold">Gabinete de Utilidades Taoístas & Asiáticas</span>
-      </div>
-      <h1 class="text-3xl sm:text-5xl font-serif font-bold tracking-tight text-white mb-4 leading-[1.15]" data-i18n="hero_title">
-        Utilidades de Precisión para el Lector & Autor Oriental
-      </h1>
-      <p class="text-ink-secondary text-sm sm:text-base leading-relaxed max-w-2xl font-normal" data-i18n="hero_desc">
-        Cómputo 100% privado en el navegador. Cero formularios de registro, cero muros de pago y exportación inmediata al portapapeles.
-      </p>
-    </div>
+  </div>
 
-    <!-- Bento Grid Asimétrico: Ritmo Estricto de 4/8pt -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      
-      <!-- Card 1: Generador de Nombres (Feature Hero) -->
-      <a href="/asian-names" class="bento-card p-6 flex flex-col justify-between group">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-jade-400 bg-jade-dim px-2 py-0.5 border border-jade-500/20" data-i18n="type_generator">GENERADOR</span>
-            <span class="text-[11px] font-mono text-ink-muted">01</span>
-          </div>
-          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool1_title">
-            Generador de Nombres Asiáticos
-          </h2>
-          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool1_desc">
-            Nombres en Kanji japonés con lectura furigana, Hangul coreano, Wuxia/Xianxia de cultivo taoísta y Devanagari con significado fonético exacto.
-          </p>
-        </div>
-        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
-          <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
-        </div>
-      </a>
+  <!-- Torii 3D Script Canónico (Three.js WebGL) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    (function initToriiBackground() {
+      const canvas = document.getElementById('gl');
+      if (!canvas || typeof THREE === 'undefined') return;
 
-      <!-- Card 2: Calculadora de Lectura -->
-      <a href="/reading-speed" class="bento-card p-6 flex flex-col justify-between group">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-ink-secondary bg-surface-3 px-2 py-0.5 border border-hairline-subtle" data-i18n="type_utility">UTILIDAD</span>
-            <span class="text-[11px] font-mono text-ink-muted">02</span>
-          </div>
-          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool2_title">
-            Calculadora de Ritmo de Lectura Wuxia
-          </h2>
-          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool2_desc">
-            Calcula días y horas para terminar novelas masivas de 2.000+ capítulos según tu velocidad WPM y tiempo diario disponible.
-          </p>
-        </div>
-        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
-          <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
-        </div>
-      </a>
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
 
-      <!-- Card 3: Reinos de Cultivo -->
-      <a href="/cultivation-realms" class="bento-card p-6 flex flex-col justify-between group">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-ink-secondary bg-surface-3 px-2 py-0.5 border border-hairline-subtle" data-i18n="type_reference">REFERENCIA</span>
-            <span class="text-[11px] font-mono text-ink-muted">03</span>
-          </div>
-          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool3_title">
-            Glosario y Reinos de Cultivo Xianxia
-          </h2>
-          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool3_desc">
-            Tabla comparativa canónica: Condensación de Qi, Establecimiento de Fundación, Núcleo Dorado, Alma Naciente y Ascensión Celestial.
-          </p>
-        </div>
-        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
-          <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
-        </div>
-      </a>
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(0, 1.2, 5.5);
 
-      <!-- Card 4: Diccionario Daoísta -->
-      <a href="/daoist-glossary" class="bento-card p-6 flex flex-col justify-between group">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-ink-secondary bg-surface-3 px-2 py-0.5 border border-hairline-subtle" data-i18n="type_reference">REFERENCIA</span>
-            <span class="text-[11px] font-mono text-ink-muted">04</span>
-          </div>
-          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool4_title">
-            Diccionario de Términos Daoístas y Marciales
-          </h2>
-          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool4_desc">
-            Guía rápida de conceptos intraducibles: Dao, Dantian, Tribulación Celestial, Cara (Mianzi) y Píldoras Espirituales con pronunciación Pinyin.
-          </p>
-        </div>
-        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
-          <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
-        </div>
-      </a>
+      // Luz cálida y suave
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambientLight);
 
-      <!-- Card 5: Conversor de Monedas -->
-      <a href="/currency-converter" class="bento-card p-6 flex flex-col justify-between group">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-ink-secondary bg-surface-3 px-2 py-0.5 border border-hairline-subtle" data-i18n="type_utility">UTILIDAD</span>
-            <span class="text-[11px] font-mono text-ink-muted">05</span>
-          </div>
-          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool5_title">
-            Conversor de Monedas de Novelas Fantásticas
-          </h2>
-          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool5_desc">
-            Convierte entre Monedas de Cobre, Lingotes de Plata, Oro y Piedras de Espíritu (Bajo, Medio y Alto Grado).
-          </p>
-        </div>
-        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
-          <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
-        </div>
-      </a>
+      const dirLight = new THREE.DirectionalLight(0xe83424, 1.2);
+      dirLight.position.set(2, 4, 3);
+      scene.add(dirLight);
 
-      <!-- Card 6: Generador de Sectas -->
-      <a href="/sect-generator" class="bento-card p-6 flex flex-col justify-between group">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[10px] font-mono text-jade-400 bg-jade-dim px-2 py-0.5 border border-jade-500/20" data-i18n="type_generator">GENERADOR</span>
-            <span class="text-[11px] font-mono text-ink-muted">06</span>
-          </div>
-          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool6_title">
-            Generador de Sectas y Clanes Antiguos
-          </h2>
-          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool6_desc">
-            Nombres para sectas ortodoxas, demoníacas, pabellones mercantiles y clanes ermitaños con lemas y elementos marciales.
-          </p>
-        </div>
-        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
-          <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-          </svg>
-        </div>
-      </a>
+      // Geometría estilizada y minimalista de Torii
+      const toriiGroup = new THREE.Group();
+      const woodMaterial = new THREE.MeshStandardMaterial({
+        color: 0x1a1c23,
+        roughness: 0.6,
+        metalness: 0.1
+      });
 
-    </div>
+      // Postes verticales
+      const postGeo = new THREE.CylinderGeometry(0.08, 0.09, 3.2, 16);
+      const postLeft = new THREE.Mesh(postGeo, woodMaterial);
+      postLeft.position.set(-1.2, 0.4, 0);
+      postLeft.rotation.z = -0.02;
 
-    <!-- Banner Editorial de Tráfico Casa (Estilo Monocle / Linear) -->
-    <div class="mt-20 border border-hairline-subtle bg-surface-1 p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center justify-between gap-8">
-      <div class="max-w-xl">
-        <span class="text-[10px] font-mono text-jade-400 uppercase tracking-widest block mb-2" data-i18n="banner_tag">BIBLIOTECA OFICIAL</span>
-        <h3 class="text-xl sm:text-2xl font-serif font-bold text-white mb-2" data-i18n="banner_title">¿Buscas algo nuevo que leer?</h3>
-        <p class="text-ink-secondary text-xs sm:text-sm leading-relaxed font-normal" data-i18n="banner_desc">
-          Explora más de 50 novelas ligeras y webnovels asiáticas traducidas con formato limpio y lectura inmersiva sin publicidad invasiva.
-        </p>
-      </div>
-      <a href="https://dakesu.net" class="inline-flex items-center justify-center bg-white text-black hover:bg-neutral-200 active:scale-[0.98] text-xs font-semibold px-6 py-3.5 transition-all shrink-0 font-mono tracking-tight" data-i18n="banner_btn">
-        Ir a Dakesu.net
-      </a>
-    </div>
+      const postRight = new THREE.Mesh(postGeo, woodMaterial);
+      postRight.position.set(1.2, 0.4, 0);
+      postRight.rotation.z = 0.02;
 
-  </main>
+      // Viga superior curva (Kasagi)
+      const topBeamGeo = new THREE.BoxGeometry(3.2, 0.14, 0.2);
+      const topBeam = new THREE.Mesh(topBeamGeo, woodMaterial);
+      topBeam.position.set(0, 1.9, 0);
 
-  <!-- Footer Sobrio y Técnico -->
-  <footer class="border-t border-hairline-subtle py-8 bg-canvas text-ink-muted text-xs relative z-10">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas de código abierto ejecutadas en el cliente.</p>
-      <div class="flex items-center gap-6 font-mono text-[11px]">
-        <a href="https://dakesu.net" class="hover:text-ink-primary transition-colors">dakesu.net</a>
-        <a href="https://seicka.net" class="hover:text-ink-primary transition-colors">seicka.net</a>
-      </div>
-    </div>
-  </footer>
+      // Viga transversal (Nuki)
+      const midBeamGeo = new THREE.BoxGeometry(2.7, 0.1, 0.14);
+      const midBeam = new THREE.Mesh(midBeamGeo, woodMaterial);
+      midBeam.position.set(0, 1.45, 0);
+
+      toriiGroup.add(postLeft, postRight, topBeam, midBeam);
+      toriiGroup.position.set(0, -0.6, 0);
+      scene.add(toriiGroup);
+
+      // Niebla sutil
+      scene.fog = new THREE.FogExp2(0x05070a, 0.12);
+
+      let mouseX = 0, mouseY = 0;
+      window.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+      }, { passive: true });
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        toriiGroup.rotation.y = THREE.MathUtils.lerp(toriiGroup.rotation.y, mouseX * 0.15, 0.04);
+        toriiGroup.rotation.x = THREE.MathUtils.lerp(toriiGroup.rotation.x, mouseY * 0.08, 0.04);
+        renderer.render(scene, camera);
+      }
+      animate();
+    })();
+  </script>
 
   <script src="/shared/i18n.js"></script>
 </body>

@@ -1,122 +1,321 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Nombres Asiáticos | Dakesu Tools</title>
-  <meta name="description" content="Generador gratuito de nombres japoneses, coreanos, chinos (Wuxia/Xianxia) e hindi con kanji, hangul, pinyin y significado etimológico.">
+  <title>Generador de Nombres Asiáticos · Dakesu Tools</title>
+  <meta name="description" content="Generador limpio de nombres en Kanji, Hangul, Chino Wuxia e Hindi con significado etimológico.">
   <link rel="canonical" href="https://tools.dakesu.net/asian-names">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              500: '#3E5CA4',
-              600: '#2E4378',
-              accent: '#E63946'
-            }
-          }
-        }
-      }
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #05070a;
+      --text: #f2ede4;
+      --text-muted: #807d8a;
+      --border: rgba(242, 237, 228, 0.12);
+      --hover-bg: rgba(242, 237, 228, 0.05);
+      --input-bg: #0d1017;
+      --pill-bg: rgba(255, 255, 255, 0.05);
+      --pill-border: rgba(255, 255, 255, 0.14);
+      --pill-hover-bg: rgba(255, 255, 255, 0.12);
+      --pill-text: rgba(255, 255, 255, 0.7);
+      --pill-text-active: #ffffff;
+      --accent: #e83424;
     }
-  </script>
-</head>
-<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
 
-  <!-- Header -->
-  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="/" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
-          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
-          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
-        </a>
-        <span class="text-xs font-mono text-neutral-500 hidden sm:inline-block">/ asian-names</span>
-      </div>
-      <a href="https://dakesu.net" class="text-xs text-neutral-400 hover:text-white transition-colors">
-        Volver a Novelas
-      </a>
-    </div>
-  </header>
+    [data-theme="light"] {
+      --bg: #faf7f2;
+      --text: #17181c;
+      --text-muted: #72747d;
+      --border: rgba(0, 0, 0, 0.08);
+      --hover-bg: rgba(0, 0, 0, 0.03);
+      --input-bg: #ffffff;
+      --pill-bg: rgba(0, 0, 0, 0.04);
+      --pill-border: rgba(0, 0, 0, 0.1);
+      --pill-hover-bg: rgba(0, 0, 0, 0.08);
+      --pill-text: rgba(0, 0, 0, 0.65);
+      --pill-text-active: #000000;
+      --accent: #d32f2f;
+    }
 
-  <!-- Contenido Principal -->
-  <main class="flex-1 max-w-4xl mx-auto px-4 py-10 w-full">
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    <div class="mb-8">
-      <h1 class="text-2xl sm:text-3xl font-semibold text-white tracking-tight mb-2">
-        Generador de Nombres Asiáticos
-      </h1>
-      <p class="text-neutral-400 text-xs sm:text-sm">
-        Crea identidades verosímiles para personajes de ficción, novelas o avatares con significado original y escritura auténtica.
-      </p>
-    </div>
+    html, body {
+      min-height: 100%;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
 
-    <!-- Controles -->
-    <div class="border border-neutral-800 bg-neutral-900/40 p-6 mb-8">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Cultura / Sistema</label>
-          <select id="cultureSelect" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 focus:outline-none focus:border-brand-500">
-            <option value="jp">Japonés (Kanji + Furigana)</option>
-            <option value="kr">Coreano (Hangul + Hanja)</option>
-            <option value="cn">Chino Wuxia / Cultivo Taoísta</option>
-            <option value="in">Hindi / Védico (Devanagari)</option>
-          </select>
-        </div>
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
 
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Arquetipo / Género</label>
-          <select id="genderSelect" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 focus:outline-none focus:border-brand-500">
-            <option value="all">Cualquiera / Místico</option>
-            <option value="male">Masculino / Marcial</option>
-            <option value="female">Femenino / Sereno</option>
-          </select>
-        </div>
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
 
-        <div>
-          <label class="block text-xs font-mono text-neutral-400 mb-2 uppercase">Cantidad</label>
-          <select id="countSelect" class="w-full bg-neutral-950 border border-neutral-800 text-neutral-200 text-xs p-3 focus:outline-none focus:border-brand-500">
-            <option value="4">4 nombres</option>
-            <option value="8">8 nombres</option>
-            <option value="12">12 nombres</option>
-          </select>
-        </div>
+    .back-link {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s ease;
+    }
+    .back-link:hover { color: var(--text); }
 
-      </div>
+    /* Control Pill Canónico */
+    .control-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px 6px;
+      background: var(--pill-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--pill-border);
+      border-radius: 9999px;
+      font-size: 12px;
+      line-height: 1;
+    }
+    .pill-btn {
+      background: transparent;
+      border: none;
+      color: var(--pill-text);
+      padding: 4px 8px;
+      border-radius: 9999px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .pill-btn:hover { background: var(--pill-hover-bg); color: var(--pill-text-active); }
+    .pill-btn-icon { padding: 4px 6px; }
+    .pill-divider { color: var(--border); font-size: 11px; user-select: none; padding: 0 2px; }
 
-      <button id="generateBtn" class="w-full sm:w-auto bg-brand-500 hover:bg-brand-600 active:scale-[0.99] text-white text-xs font-medium px-6 py-3 transition-all">
-        Generar Nombres
-      </button>
-    </div>
+    /* Header de la App */
+    .app-header {
+      margin-bottom: 32px;
+    }
+    .app-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .app-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
 
-    <!-- Resultados -->
-    <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    /* Formulario Limpio estilo ProWritingAid */
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: flex-end;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 600px) {
+      .controls { grid-template-columns: 1fr; }
+    }
 
-    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
-    <div class="mt-12 border border-neutral-800 bg-neutral-900/30 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-      <div>
-        <p class="font-medium text-white mb-1">¿Inspirándote para escribir?</p>
-        <p class="text-neutral-400">Lee traducciones pulidas de cultivation y fantasía asiática en Dakesu.</p>
-      </div>
-      <a href="https://dakesu.net" class="text-brand-500 hover:text-white underline font-mono">
-        dakesu.net/novelas &rarr;
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    select {
+      width: 100%;
+      height: 40px;
+      background: var(--input-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 0;
+      padding: 0 12px;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    select:focus { border-color: var(--text); }
+
+    .submit-btn {
+      height: 40px;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      padding: 0 20px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+      white-space: nowrap;
+    }
+    .submit-btn:hover { opacity: 0.88; }
+    .submit-btn:active { transform: scale(0.98); }
+
+    /* Grid de Resultados */
+    .results {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .results { grid-template-columns: 1fr; }
+    }
+
+    .name-card {
+      border: 1px solid var(--border);
+      background: var(--hover-bg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 140px;
+      transition: border-color 0.15s ease;
+    }
+    .name-card:hover { border-color: var(--text-muted); }
+
+    .name-orig {
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+    }
+    .name-romaji {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: monospace;
+      margin-bottom: 8px;
+    }
+    .name-meaning {
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .name-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .copy-btn {
+      align-self: flex-end;
+      background: transparent;
+      border: none;
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin-top: 12px;
+      padding: 2px 4px;
+    }
+    .copy-btn:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+    
+    <header class="top-bar">
+      <a href="/" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+        <span>Tools</span>
       </a>
+
+      <!-- Pill Switch Canónico (Mabelcox) -->
+      <div class="control-pill" role="toolbar" aria-label="Preferencias">
+        <button id="langToggle" class="pill-btn" aria-label="Cambiar idioma">
+          <span id="langToggleLabel">EN</span>
+        </button>
+
+        <span class="pill-divider" aria-hidden="true">/</span>
+
+        <button id="themeToggle" class="pill-btn pill-btn-icon" aria-label="Cambiar modo de color" title="Cambiar tema">
+          <svg class="sun-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" style="display:none;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-header">
+      <h1 class="app-title" data-i18n="an_title">Generador de Nombres Asiáticos</h1>
+      <p class="app-desc" data-i18n="an_desc">Nombres y caracteres para personajes de ficción y novelas.</p>
     </div>
 
-  </main>
+    <div class="controls">
+      <div class="field">
+        <label data-i18n="an_culture">Cultura</label>
+        <select id="cultureSelect">
+          <option value="jp" data-i18n="an_jp">Japonés (Kanji)</option>
+          <option value="kr" data-i18n="an_kr">Coreano (Hangul)</option>
+          <option value="cn" data-i18n="an_cn">Chino (Wuxia / Cultivo)</option>
+          <option value="in" data-i18n="an_in">Hindi (Védico)</option>
+        </select>
+      </div>
 
-  <footer class="border-t border-neutral-900 py-6 bg-neutral-950 text-neutral-500 text-xs text-center">
-    <p>&copy; 2026 Dakesu. Herramientas estáticas alojadas en Edge.</p>
-  </footer>
+      <div class="field">
+        <label data-i18n="an_archetype">Arquetipo</label>
+        <select id="genderSelect">
+          <option value="all" data-i18n="an_all">Todos</option>
+          <option value="male" data-i18n="an_male">Masculino</option>
+          <option value="female" data-i18n="an_female">Femenino</option>
+        </select>
+      </div>
 
-  <!-- Lógica 100% Client-Side -->
+      <button id="generateBtn" class="submit-btn" data-i18n="an_btn">Generar</button>
+    </div>
+
+    <div id="resultsGrid" class="results"></div>
+
+  </div>
+
+  <script src="/shared/i18n.js"></script>
   <script>
     const database = {
       jp: [
-        { orig: "黒澤 蓮", romaji: "Kurosawa Ren", meaning: "Pantano negro · Loto sagrado", desc: "Arquetipo de cultivador sombrío o samurái taciturno", gender: "male" },
+        { orig: "黒澤 蓮", romaji: "Kurosawa Ren", meaning: "Pantano negro · Loto sagrado", desc: "Arquetipo de cultivador sombrío o samurái", gender: "male" },
         { orig: "白石 葵", romaji: "Shiraishi Aoi", meaning: "Piedra blanca · Malva azul", desc: "Pureza, resiliencia y nobleza feudal", gender: "female" },
         { orig: "神谷 颯太", romaji: "Kamiya Souta", meaning: "Valle divino · Viento repentino", desc: "Portador de técnicas de viento y velocidad", gender: "male" },
         { orig: "藤堂 桜", romaji: "Toudo Sakura", meaning: "Templo de glicinas · Flor de cerezo", desc: "Linaje de estrategas cortesanos", gender: "female" },
@@ -127,28 +326,24 @@
         { orig: "강 하진", romaji: "Kang Ha-jin", meaning: "Río fuerte · Verdad del cielo", desc: "Cazador de rango superior o heredero de gremio", gender: "male" },
         { orig: "서 유나", romaji: "Seo Yu-na", meaning: "Tranquilidad · Gracia radiante", desc: "Sanadora espiritual o diplomática", gender: "female" },
         { orig: "백 도현", romaji: "Baek Do-hyun", meaning: "Blanco puro · Camino virtuoso", desc: "Espadachín de secta tradicional", gender: "male" },
-        { orig: "윤 채은", romaji: "Yoon Chae-eun", meaning: "Luz de jade · Bondad sincera", desc: "Erudita arcana de torre mágica", gender: "female" },
-        { orig: "신 시우", romaji: "Shin Si-woo", meaning: "Divino · Lluvia a tiempo", desc: "Portador de milagros o despertar divino", gender: "all" }
+        { orig: "윤 채은", romaji: "Yoon Chae-eun", meaning: "Luz de jade · Bondad sincera", desc: "Erudita arcana de torre mágica", gender: "female" }
       ],
       cn: [
-        { orig: "叶 辰", romaji: "Ye Chen", meaning: "Hoja caída · Astro celestial", desc: "Clásico protagonista de superación y cultivo taoísta", gender: "male" },
-        { orig: "苏 凌雪", romaji: "Su Lingxue", meaning: "Seda sobria · Nieve en la cumbre", desc: "Hada de hielo o doncella de secta suprema", gender: "female" },
-        { orig: "林 傲天", romaji: "Lin Aotian", meaning: "Bosque profundo · Orgullo desafiante al cielo", desc: "Genio arrogante o némesis de clan", gender: "male" },
-        { orig: "凤 梦华", romaji: "Feng Menghua", meaning: "Fénix primordial · Flor de ensueño", desc: "Reencarnación de linaje místico", gender: "female" },
+        { orig: "叶 辰", romaji: "Ye Chen", meaning: "Hoja caída · Astro celestial", desc: "Protagonista de superación y cultivo taoísta", gender: "male" },
+        { orig: "苏 凌雪", romaji: "Su Lingxue", meaning: "Seda sobria · Nieve en la cumbre", desc: "Hada de hielo o doncella de secta", gender: "female" },
+        { orig: "林 傲天", romaji: "Lin Aotian", meaning: "Bosque profundo · Desafiante al cielo", desc: "Genio arrogante o némesis de clan", gender: "male" },
         { orig: "无 尘", romaji: "Wu Chen", meaning: "Cero polvo · Mente inmaculada", desc: "Monje guerrero o maestro ermitaño", gender: "all" }
       ],
       in: [
-        { orig: "अर्जुन वर्मा", romaji: "Arjun Verma", meaning: "Luminoso / Puro · Armadura protectora", desc: "Arquetipo del arquero invicto y estratega", gender: "male" },
+        { orig: "अर्जुन वर्मा", romaji: "Arjun Verma", meaning: "Luminoso / Puro · Armadura protectora", desc: "Arquero invicto y estratega", gender: "male" },
         { orig: "अनन्या राव", romaji: "Ananya Rao", meaning: "Incomparable · De linaje noble", desc: "Maestra de mantras y oráculos", gender: "female" },
-        { orig: "रुद्र कश्यप", romaji: "Rudra Kashyap", meaning: "El que ruge (manifestación fiera) · Sabio védico", desc: "Guerrero asceta de técnicas elementales de fuego", gender: "male" },
-        { orig: "ईशा नायर", romaji: "Isha Nair", meaning: "Protectora soberana · Líder de clan", desc: "Guardián de templos y reliquias antiguas", gender: "female" }
+        { orig: "रुद्र कश्यप", romaji: "Rudra Kashyap", meaning: "Manifestación fiera · Sabio védico", desc: "Guerrero asceta de fuego", gender: "male" }
       ]
     };
 
     function renderNames() {
       const culture = document.getElementById('cultureSelect').value;
       const gender = document.getElementById('genderSelect').value;
-      const count = parseInt(document.getElementById('countSelect').value, 10);
       const grid = document.getElementById('resultsGrid');
 
       let pool = database[culture] || [];
@@ -157,30 +352,19 @@
         if (filtered.length > 0) pool = filtered;
       }
 
-      // Shuffle y slice
-      const shuffled = [...pool].sort(() => 0.5 - Math.random());
-      const selected = [];
-      while (selected.length < count) {
-        for (let item of shuffled) {
-          if (selected.length < count) selected.push(item);
-        }
-      }
+      const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 4);
 
-      grid.innerHTML = selected.map(item => `
-        <div class="border border-neutral-800 bg-neutral-900/40 p-5 flex flex-col justify-between hover:border-neutral-700 transition-colors">
+      grid.innerHTML = shuffled.map(item => `
+        <div class="name-card">
           <div>
-            <div class="flex items-baseline justify-between mb-2">
-              <span class="text-2xl font-serif font-bold text-white tracking-wide">${item.orig}</span>
-              <span class="text-xs font-mono text-brand-500">${item.romaji}</span>
-            </div>
-            <p class="text-xs font-mono text-neutral-400 mb-2">${item.meaning}</p>
-            <p class="text-xs text-neutral-500 leading-relaxed">${item.desc}</p>
+            <div class="name-orig">${item.orig}</div>
+            <div class="name-romaji">${item.romaji}</div>
+            <div class="name-meaning">${item.meaning}</div>
+            <div class="name-desc">${item.desc}</div>
           </div>
-          <div class="mt-4 pt-3 border-t border-neutral-800/60 flex justify-end">
-            <button onclick="navigator.clipboard.writeText('${item.orig} (${item.romaji})'); this.innerText = '¡Copiado!';" class="text-xs font-mono text-neutral-400 hover:text-white transition-colors">
-              Copiar
-            </button>
-          </div>
+          <button onclick="navigator.clipboard.writeText('${item.orig} (${item.romaji})'); this.innerText = '${currentLang === 'es' ? '¡Copiado!' : 'Copied!'}';" class="copy-btn">
+            ${currentLang === 'es' ? 'Copiar' : 'Copy'}
+          </button>
         </div>
       `).join('');
     }
@@ -188,10 +372,9 @@
     document.getElementById('generateBtn').addEventListener('click', renderNames);
     document.getElementById('cultureSelect').addEventListener('change', renderNames);
     document.getElementById('genderSelect').addEventListener('change', renderNames);
-    document.getElementById('countSelect').addEventListener('change', renderNames);
 
     renderNames();
+    window.addEventListener('dakesu:langchange', renderNames);
   </script>
-
 </body>
 </html>
