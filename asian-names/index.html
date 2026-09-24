@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generador de Nombres Asiáticos · Dakesu Tools</title>
-  <meta name="description" content="Generador limpio de nombres en Kanji, Hangul, Chino Wuxia e Hindi con significado etimológico.">
+  <meta name="description" content="Generador limpio de nombres en Kanji, Hangul, Chino Wuxia, Vietnamita e Hindi con significado etimológico.">
   <link rel="canonical" href="https://tools.dakesu.net/asian-names">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,12 +14,12 @@
   <style>
     :root {
       --bg: #06080d;
-      --bg-gradient: radial-gradient(circle at 50% 0%, #111420 0%, #06080d 75%);
+      --bg-gradient: radial-gradient(circle at 50% 0%, #121624 0%, #06080d 75%);
       --text: #f2ede4;
       --text-muted: #848291;
       --border: rgba(242, 237, 228, 0.12);
       --hover-bg: rgba(242, 237, 228, 0.04);
-      --card-bg: rgba(14, 17, 26, 0.7);
+      --card-bg: rgba(14, 17, 26, 0.72);
       --input-bg: #0d1017;
       --pill-bg: rgba(255, 255, 255, 0.05);
       --pill-border: rgba(255, 255, 255, 0.14);
@@ -28,8 +28,6 @@
       --pill-text-active: #ffffff;
       --accent: #e83424;
       --accent-subtle: rgba(232, 52, 36, 0.12);
-      --petal-color: rgba(255, 175, 190, 0.45);
-      --tag-culture: #ff758f;
     }
 
     [data-theme="light"] {
@@ -39,7 +37,7 @@
       --text-muted: #72747d;
       --border: rgba(0, 0, 0, 0.08);
       --hover-bg: rgba(0, 0, 0, 0.03);
-      --card-bg: rgba(255, 255, 255, 0.75);
+      --card-bg: rgba(255, 255, 255, 0.8);
       --input-bg: #ffffff;
       --pill-bg: rgba(0, 0, 0, 0.04);
       --pill-border: rgba(0, 0, 0, 0.1);
@@ -48,8 +46,6 @@
       --pill-text-active: #000000;
       --accent: #d32f2f;
       --accent-subtle: rgba(211, 47, 47, 0.08);
-      --petal-color: rgba(230, 110, 135, 0.35);
-      --tag-culture: #c92a43;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -87,12 +83,18 @@
       padding: 32px 24px;
     }
 
-    /* Top Bar */
+    /* Top Bar con Menú de Tools Integrado */
     .top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 48px;
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
 
     .back-link {
@@ -105,6 +107,68 @@
       transition: color 0.15s ease;
     }
     .back-link:hover { color: var(--text); }
+
+    /* Dropdown de Navegación entre Herramientas */
+    .nav-tools-wrap {
+      position: relative;
+    }
+    .nav-tools-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .nav-tools-trigger:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+    .tools-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      min-width: 220px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      z-index: 50;
+    }
+    .tools-dropdown-menu.open {
+      display: flex;
+    }
+    .tools-dropdown-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.15s ease;
+    }
+    .tools-dropdown-item:last-child {
+      border-bottom: none;
+    }
+    .tools-dropdown-item:hover {
+      background: var(--hover-bg);
+      color: var(--accent);
+    }
+    .tools-dropdown-item.active {
+      font-weight: 600;
+      color: var(--accent);
+    }
 
     /* Control Pill Canónico */
     .control-pill {
@@ -141,18 +205,54 @@
 
     /* Header de la App */
     .app-header {
-      margin-bottom: 32px;
+      margin-bottom: 24px;
     }
     .app-title {
       font-size: 26px;
       font-weight: 600;
       letter-spacing: -0.02em;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .app-desc {
       font-size: 14px;
       color: var(--text-muted);
       font-weight: 400;
+    }
+
+    /* Switch de Modos: Catálogo / Combinatoria */
+    .mode-switch-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+    .mode-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      font-size: 12px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .mode-btn:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+    .mode-btn.active {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+      font-weight: 600;
+    }
+    .mode-badge {
+      font-size: 11px;
+      font-family: monospace;
+      color: var(--text-muted);
+      margin-left: auto;
     }
 
     /* Formulario Limpio estilo ProWritingAid */
@@ -161,7 +261,7 @@
       grid-template-columns: 1fr 1fr auto;
       gap: 12px;
       align-items: flex-end;
-      margin-bottom: 40px;
+      margin-bottom: 36px;
     }
     @media (max-width: 600px) {
       .controls { grid-template-columns: 1fr; }
@@ -255,7 +355,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 150px;
+      min-height: 155px;
       position: relative;
       transition: border-color 0.15s ease;
     }
@@ -321,12 +421,33 @@
   <div class="page">
     
     <header class="top-bar">
-      <a href="/" class="back-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-        </svg>
-        <span>Tools</span>
-      </a>
+      <div class="top-left">
+        <a href="/" class="back-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          <span>Tools</span>
+        </a>
+
+        <!-- Menú de Interconexión Rápida de Herramientas -->
+        <div class="nav-tools-wrap">
+          <button id="toolsMenuBtn" class="nav-tools-trigger" aria-haspopup="true" aria-expanded="false">
+            <span data-i18n="nav_tools_menu">Herramientas</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+          
+          <nav id="toolsDropdown" class="tools-dropdown-menu" aria-label="Todas las herramientas">
+            <a href="/asian-names" class="tools-dropdown-item active" data-i18n="tool1_name">Generador de Nombres</a>
+            <a href="/reading-speed" class="tools-dropdown-item" data-i18n="tool2_name">Calculadora de Lectura</a>
+            <a href="/cultivation-realms" class="tools-dropdown-item" data-i18n="tool3_name">Reinos de Cultivo</a>
+            <a href="/daoist-glossary" class="tools-dropdown-item" data-i18n="tool4_name">Diccionario Daoísta</a>
+            <a href="/currency-converter" class="tools-dropdown-item" data-i18n="tool5_name">Conversor de Monedas</a>
+            <a href="/sect-generator" class="tools-dropdown-item" data-i18n="tool6_name">Generador de Sectas</a>
+          </nav>
+        </div>
+      </div>
 
       <!-- Pill Switch Canónico (Mabelcox) -->
       <div class="control-pill" role="toolbar" aria-label="Preferencias">
@@ -357,10 +478,17 @@
 
     <div class="app-header">
       <h1 class="app-title" data-i18n="an_title">Generador de Nombres Asiáticos</h1>
-      <p class="app-desc" data-i18n="an_desc">Nombres y caracteres auténticos para personajes de ficción, manhwas y novelas.</p>
+      <p class="app-desc" data-i18n="an_desc">Nombres y caracteres auténticos para novelas, ficción y avatares.</p>
     </div>
 
-    <!-- Filtros estilo ProWritingAid -->
+    <!-- Modos: Catálogo Real vs Generación Combinatoria 100% Free / Client-Side -->
+    <div class="mode-switch-bar">
+      <button id="modeRandomBtn" class="mode-btn active" data-i18n="an_mode_random">Modo Catálogo</button>
+      <button id="modeCustomBtn" class="mode-btn" data-i18n="an_mode_custom">Modo Combinatoria</button>
+      <span class="mode-badge" data-i18n="an_mode_desc">100% libre de servidor y sin tokens</span>
+    </div>
+
+    <!-- Filtros -->
     <div class="controls">
       <div class="field">
         <label data-i18n="an_culture">Cultura</label>
@@ -370,6 +498,7 @@
             <option value="kr" data-i18n="an_kr">Coreano (Hangul)</option>
             <option value="cn" data-i18n="an_cn">Chino (Wuxia / Cultivo)</option>
             <option value="in" data-i18n="an_in">Hindi (Védico)</option>
+            <option value="vn" data-i18n="an_vn">Vietnamita (Hán)</option>
           </select>
         </div>
       </div>
@@ -381,6 +510,7 @@
             <option value="all" data-i18n="an_all">Todos</option>
             <option value="male" data-i18n="an_male">Masculino</option>
             <option value="female" data-i18n="an_female">Femenino</option>
+            <option value="fantasy" data-i18n="an_fantasy">Fantasía / Soberano</option>
           </select>
         </div>
       </div>
@@ -400,7 +530,7 @@
       const ctx = canvas.getContext('2d');
       let w, h;
       let petals = [];
-      const COUNT = 22; // Cantidad sutil, cero sobrecarga
+      const COUNT = 22;
 
       function resize() {
         w = canvas.width = window.innerWidth;
@@ -473,48 +603,166 @@
 
   <script src="/shared/i18n.js"></script>
   <script>
+    // Base de datos canónica ampliada (Catálogo)
     const database = {
       jp: [
         { orig: "黒澤 蓮", romaji: "Kurosawa Ren", meaning: "Pantano negro · Loto sagrado", desc: "Arquetipo de cultivador sombrío o samurái", gender: "male" },
         { orig: "白石 葵", romaji: "Shiraishi Aoi", meaning: "Piedra blanca · Malva azul", desc: "Pureza, resiliencia y nobleza feudal", gender: "female" },
         { orig: "神谷 颯太", romaji: "Kamiya Souta", meaning: "Valle divino · Viento repentino", desc: "Portador de técnicas de viento y velocidad", gender: "male" },
         { orig: "藤堂 桜", romaji: "Toudo Sakura", meaning: "Templo de glicinas · Flor de cerezo", desc: "Linaje de estrategas cortesanos", gender: "female" },
-        { orig: "夜神 零", romaji: "Yagami Rei", meaning: "Dios nocturno · Cero absoluto", desc: "Entidad en el umbral del vacío", gender: "all" },
-        { orig: "月城 悠", romaji: "Tsukishiro Yuu", meaning: "Castillo lunar · Eternidad serena", desc: "Magia espiritual o reinos astrales", gender: "all" }
+        { orig: "夜神 零", romaji: "Yagami Rei", meaning: "Dios nocturno · Cero absoluto", desc: "Entidad en el umbral del vacío", gender: "fantasy" },
+        { orig: "月城 悠", romaji: "Tsukishiro Yuu", meaning: "Castillo lunar · Eternidad serena", desc: "Magia espiritual o reinos astrales", gender: "fantasy" },
+        { orig: "橘 琥珀", romaji: "Tachibana Kohaku", meaning: "Cítrico ancestral · Joya de ámbar", desc: "Alquimista o guardián de tesoros", gender: "female" },
+        { orig: "龍崎 焔", romaji: "Ryuzaki Homura", meaning: "Cabo del dragón · Llama viva", desc: "Guerrero marcial de elemento fuego", gender: "male" }
       ],
       kr: [
         { orig: "강 하진", romaji: "Kang Ha-jin", meaning: "Río fuerte · Verdad del cielo", desc: "Cazador de rango superior o heredero de gremio", gender: "male" },
         { orig: "서 유나", romaji: "Seo Yu-na", meaning: "Tranquilidad · Gracia radiante", desc: "Sanadora espiritual o diplomática", gender: "female" },
         { orig: "백 도현", romaji: "Baek Do-hyun", meaning: "Blanco puro · Camino virtuoso", desc: "Espadachín de secta tradicional", gender: "male" },
-        { orig: "윤 채은", romaji: "Yoon Chae-eun", meaning: "Luz de jade · Bondad sincera", desc: "Erudita arcana de torre mágica", gender: "female" }
+        { orig: "윤 채은", romaji: "Yoon Chae-eun", meaning: "Luz de jade · Bondad sincera", desc: "Erudita arcana de torre mágica", gender: "female" },
+        { orig: "천 무영", romaji: "Cheon Mu-young", meaning: "Cielo infinito · Sin sombra", desc: "Asesino espectral o maestro del vacío", gender: "fantasy" },
+        { orig: "신 혜린", romaji: "Shin Hye-rin", meaning: "Gracia divina · Unicornio lúcido", desc: "Invocadora de bestias celestiales", gender: "female" }
       ],
       cn: [
         { orig: "叶 辰", romaji: "Ye Chen", meaning: "Hoja caída · Astro celestial", desc: "Protagonista de superación y cultivo taoísta", gender: "male" },
         { orig: "苏 凌雪", romaji: "Su Lingxue", meaning: "Seda sobria · Nieve en la cumbre", desc: "Hada de hielo o doncella de secta", gender: "female" },
-        { orig: "林 傲天", romaji: "Lin Aotian", meaning: "Bosque profundo · Desafiante al cielo", desc: "Genio arrogante o némesis de clan", gender: "male" },
-        { orig: "无 尘", romaji: "Wu Chen", meaning: "Cero polvo · Mente inmaculada", desc: "Monje guerrero o maestro ermitaño", gender: "all" }
+        { orig: "林 傲天", romaji: "Lin Aotian", meaning: "Bosque profundo · Desafiante al cielo", desc: "Genio arrogante o soberano supremo", gender: "fantasy" },
+        { orig: "无 尘", romaji: "Wu Chen", meaning: "Cero polvo · Mente inmaculada", desc: "Monje guerrero o maestro ermitaño", gender: "male" },
+        { orig: "楚 狂人", romaji: "Chu Kuangren", meaning: "Tierra ancestral · Loco indomable", desc: "Cultivador demoníaco sin reglas", gender: "fantasy" },
+        { orig: "凤 鸣玉", romaji: "Feng Mingyu", meaning: "Canto de fénix · Jade sonoro", desc: "Heredera de linaje imperial sagrado", gender: "female" }
       ],
       in: [
-        { orig: "अर्जुन वर्मा", romaji: "Arjun Verma", meaning: "Luminoso / Puro · Armadura protectora", desc: "Arquero invicto y estratega", gender: "male" },
-        { orig: "अनन्या राव", romaji: "Ananya Rao", meaning: "Incomparable · De linaje noble", desc: "Maestra de mantras y oráculos", gender: "female" },
-        { orig: "रुद्र कश्यप", romaji: "Rudra Kashyap", meaning: "Manifestación fiera · Sabio védico", desc: "Guerrero asceta de fuego", gender: "male" }
+        { orig: "अर्जुन वर्मा", romaji: "Arjun Verma", meaning: "Luminoso / Puro · Armadura protectora", desc: "Arquero invicto y estratega védico", gender: "male" },
+        { orig: "अनन्या राव", romaji: "Ananya Rao", meaning: "Incomparable · De linaje noble", desc: "Maestra de mantras y oráculos sagrados", gender: "female" },
+        { orig: "रुद्र कश्यप", romaji: "Rudra Kashyap", meaning: "Manifestación fiera · Sabio védico", desc: "Guerrero asceta dominador del fuego", gender: "fantasy" },
+        { orig: "ईशान देव", romaji: "Ishan Dev", meaning: "Señor regente del noreste · Ser divino", desc: "Monarca devoto del orden cósmico", gender: "male" }
+      ],
+      vn: [
+        { orig: "Nguyễn Long", romaji: "Nguyen Long", meaning: "Primer linaje · Dragón ascendente", desc: "Comandante marcial de dinastía real", gender: "male" },
+        { orig: "Trần Mai Chi", romaji: "Tran Mai Chi", meaning: "Paz soberana · Rama de ciruelo", desc: "Hechicera de medicina tradicional", gender: "female" },
+        { orig: "Vũ Thiên Mệnh", romaji: "Vu Thien Menh", meaning: "Canto de tormenta · Mandato del cielo", desc: "Heredero profético de las montañas", gender: "fantasy" }
       ]
     };
+
+    // Componentes para Generación Combinatoria 100% Local (Sustituto de IA sin costo ni tokens)
+    const combinatorData = {
+      jp: {
+        surnames: [
+          { char: "神代", rom: "Kamishiro", mean: "Era divina" },
+          { char: "霧島", rom: "Kirishima", mean: "Isla de niebla" },
+          { char: "星野", rom: "Hoshino", mean: "Campo de estrellas" },
+          { char: "不知火", rom: "Shiranui", mean: "Fuego misterioso" },
+          { char: "白銀", rom: "Shirogane", mean: "Plata pura" }
+        ],
+        maleNames: [
+          { char: "刃", rom: "Jin", mean: "Filo de espada" },
+          { char: "蒼真", rom: "Souma", mean: "Verdad azul" },
+          { char: "雷蔵", rom: "Raizou", mean: "Guardián del rayo" }
+        ],
+        femaleNames: [
+          { char: "美琴", rom: "Mikoto", mean: "Cítara hermosa" },
+          { char: "凛", rom: "Rin", mean: "Dignidad gélida" },
+          { char: "千代", rom: "Chiyo", mean: "Mil generaciones" }
+        ],
+        fantasyNames: [
+          { char: "虚空", rom: "Kokuu", mean: "Vacío primordial" },
+          { char: "天狼", rom: "Tenrou", mean: "Lobo celestial" }
+        ]
+      },
+      cn: {
+        surnames: [
+          { char: "君", rom: "Jun", mean: "Monarca" },
+          { char: "独孤", rom: "Dugu", mean: "Solitario invicto" },
+          { char: "东方", rom: "Dongfang", mean: "Oriente sagrado" },
+          { char: "慕容", rom: "Murong", mean: "Corte imperial" },
+          { char: "厉", rom: "Li", mean: "Severo / Feroz" }
+        ],
+        maleNames: [
+          { char: "逍遥", rom: "Xiaoyao", mean: "Libre y sin ataduras" },
+          { char: "天行", rom: "Tianxing", mean: "Paso celestial" },
+          { char: "破天", rom: "Potian", mean: "Quebrantador del cielo" }
+        ],
+        femaleNames: [
+          { char: "倾城", rom: "Qingcheng", mean: "Belleza suprema" },
+          { char: "语嫣", rom: "Yuyan", mean: "Sonrisa elegante" },
+          { char: "红拂", rom: "Hongfu", mean: "Pluma carmesí" }
+        ],
+        fantasyNames: [
+          { char: "灭天", rom: "Mietian", mean: "Extinguidor celestial" },
+          { char: "太虚", rom: "Taixu", mean: "Gran Vacío Supremo" }
+        ]
+      },
+      kr: {
+        surnames: [
+          { char: "천", rom: "Cheon", mean: "Cielo" },
+          { char: "독고", rom: "Dokgo", mean: "Ermitaño" },
+          { char: "진", rom: "Jin", mean: "Verdad" },
+          { char: "명", rom: "Myung", mean: "Luminoso" }
+        ],
+        maleNames: [
+          { char: "태오", rom: "Tae-oh", mean: "Gran amanecer" },
+          { char: "도진", rom: "Do-jin", mean: "Guardián del sendero" }
+        ],
+        femaleNames: [
+          { char: "서현", rom: "Seo-hyun", mean: "Virtud brillante" },
+          { char: "하린", rom: "Ha-rin", mean: "Loto del verano" }
+        ],
+        fantasyNames: [
+          { char: "비룡", rom: "Bi-ryong", mean: "Dragón volador" },
+          { char: "묵야", rom: "Muk-ya", mean: "Noche de tinta" }
+        ]
+      }
+    };
+
+    let activeMode = "random"; // 'random' o 'custom'
+
+    function generateCombinatorNames(culture, gender) {
+      const data = combinatorData[culture] || combinatorData.cn;
+      const surnames = data.surnames;
+      let firstnames = [];
+
+      if (gender === 'male') firstnames = data.maleNames;
+      else if (gender === 'female') firstnames = data.femaleNames;
+      else if (gender === 'fantasy') firstnames = data.fantasyNames;
+      else firstnames = [...data.maleNames, ...data.femaleNames, ...data.fantasyNames];
+
+      const results = [];
+      const shuffledSur = [...surnames].sort(() => 0.5 - Math.random());
+      const shuffledFirst = [...firstnames].sort(() => 0.5 - Math.random());
+
+      for (let i = 0; i < Math.min(4, shuffledSur.length); i++) {
+        const s = shuffledSur[i];
+        const f = shuffledFirst[i % shuffledFirst.length];
+        results.push({
+          orig: `${s.char} ${f.char}`,
+          romaji: `${s.rom} ${f.rom}`,
+          meaning: `${s.mean} · ${f.mean}`,
+          desc: "Combinatoria morfológica generada localmente",
+          gender: gender
+        });
+      }
+      return results;
+    }
 
     function renderNames() {
       const culture = document.getElementById('cultureSelect').value;
       const gender = document.getElementById('genderSelect').value;
       const grid = document.getElementById('resultsGrid');
 
-      let pool = database[culture] || [];
-      if (gender !== 'all') {
-        const filtered = pool.filter(item => item.gender === gender || item.gender === 'all');
-        if (filtered.length > 0) pool = filtered;
+      let list = [];
+
+      if (activeMode === 'custom') {
+        list = generateCombinatorNames(culture, gender);
+      } else {
+        let pool = database[culture] || database.jp;
+        if (gender !== 'all') {
+          const filtered = pool.filter(item => item.gender === gender);
+          if (filtered.length > 0) pool = filtered;
+        }
+        list = [...pool].sort(() => 0.5 - Math.random()).slice(0, 4);
       }
 
-      const shuffled = [...pool].sort(() => 0.5 - Math.random()).slice(0, 4);
-
-      grid.innerHTML = shuffled.map(item => `
+      grid.innerHTML = list.map(item => `
         <article class="name-card">
           <div>
             <div class="name-card-top">
@@ -530,6 +778,21 @@
         </article>
       `).join('');
     }
+
+    // Toggle de Modos
+    document.getElementById('modeRandomBtn').addEventListener('click', function() {
+      activeMode = 'random';
+      this.classList.add('active');
+      document.getElementById('modeCustomBtn').classList.remove('active');
+      renderNames();
+    });
+
+    document.getElementById('modeCustomBtn').addEventListener('click', function() {
+      activeMode = 'custom';
+      this.classList.add('active');
+      document.getElementById('modeRandomBtn').classList.remove('active');
+      renderNames();
+    });
 
     document.getElementById('generateBtn').addEventListener('click', renderNames);
     document.getElementById('cultureSelect').addEventListener('change', renderNames);

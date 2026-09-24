@@ -68,6 +68,12 @@
       margin-bottom: 48px;
     }
 
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
     .back-link {
       font-size: 14px;
       color: var(--text-muted);
@@ -78,6 +84,67 @@
       transition: color 0.15s ease;
     }
     .back-link:hover { color: var(--text); }
+
+    .nav-tools-wrap {
+      position: relative;
+    }
+    .nav-tools-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .nav-tools-trigger:hover {
+      color: var(--text);
+      border-color: var(--text-muted);
+    }
+    .tools-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      background: var(--input-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      min-width: 220px;
+      display: none;
+      flex-direction: column;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      z-index: 50;
+    }
+    .tools-dropdown-menu.open {
+      display: flex;
+    }
+    .tools-dropdown-item {
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.15s ease;
+    }
+    .tools-dropdown-item:last-child {
+      border-bottom: none;
+    }
+    .tools-dropdown-item:hover {
+      background: var(--hover-bg);
+      color: var(--accent);
+    }
+    .tools-dropdown-item.active {
+      font-weight: 600;
+      color: var(--accent);
+    }
 
     /* Control Pill Canónico */
     .control-pill {
@@ -238,12 +305,33 @@
   <div class="page">
     
     <header class="top-bar">
-      <a href="/" class="back-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-        </svg>
-        <span>Tools</span>
-      </a>
+      <div class="top-left">
+        <a href="/" class="back-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          <span>Tools</span>
+        </a>
+
+        <!-- Menú de Interconexión Rápida de Herramientas -->
+        <div class="nav-tools-wrap">
+          <button id="toolsMenuBtn" class="nav-tools-trigger" aria-haspopup="true" aria-expanded="false">
+            <span data-i18n="nav_tools_menu">Herramientas</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
+          
+          <nav id="toolsDropdown" class="tools-dropdown-menu" aria-label="Todas las herramientas">
+            <a href="/asian-names" class="tools-dropdown-item" data-i18n="tool1_name">Generador de Nombres</a>
+            <a href="/reading-speed" class="tools-dropdown-item" data-i18n="tool2_name">Calculadora de Lectura</a>
+            <a href="/cultivation-realms" class="tools-dropdown-item" data-i18n="tool3_name">Reinos de Cultivo</a>
+            <a href="/daoist-glossary" class="tools-dropdown-item" data-i18n="tool4_name">Diccionario Daoísta</a>
+            <a href="/currency-converter" class="tools-dropdown-item active" data-i18n="tool5_name">Conversor de Monedas</a>
+            <a href="/sect-generator" class="tools-dropdown-item" data-i18n="tool6_name">Generador de Sectas</a>
+          </nav>
+        </div>
+      </div>
 
       <!-- Pill Switch Canónico (Mabelcox) -->
       <div class="control-pill" role="toolbar" aria-label="Preferencias">

@@ -6,6 +6,7 @@ const i18nData = {
     site_title: "Herramientas · Dakesu",
     site_name: "Dakesu Tools",
     nav_novels: "Novelas",
+    nav_tools_menu: "Herramientas",
     
     // Nombres Limpios de Apps
     tool1_name: "Generador de Nombres",
@@ -17,7 +18,7 @@ const i18nData = {
 
     // App Asian Names
     an_title: "Generador de Nombres Asiáticos",
-    an_desc: "Nombres y caracteres para personajes de ficción y novelas.",
+    an_desc: "Nombres y caracteres auténticos para novelas, ficción y avatares.",
     an_culture: "Cultura",
     an_archetype: "Arquetipo",
     an_count: "Cantidad",
@@ -28,9 +29,15 @@ const i18nData = {
     an_kr: "Coreano (Hangul)",
     an_cn: "Chino (Wuxia / Cultivo)",
     an_in: "Hindi (Védico)",
+    an_vn: "Vietnamita (Hán)",
+    an_th: "Tailandés",
     an_all: "Todos",
     an_male: "Masculino",
     an_female: "Femenino",
+    an_fantasy: "Fantasía / Soberano",
+    an_mode_random: "Modo Catálogo",
+    an_mode_custom: "Modo Combinatoria",
+    an_mode_desc: "Generador 100% libre de servidor y sin consumo de tokens.",
 
     // Reading Speed
     rs_title: "Calculadora de Ritmo de Lectura",
@@ -71,6 +78,7 @@ const i18nData = {
     site_title: "Tools · Dakesu",
     site_name: "Dakesu Tools",
     nav_novels: "Novels",
+    nav_tools_menu: "Tools",
     
     // Clean App Names
     tool1_name: "Asian Name Generator",
@@ -82,7 +90,7 @@ const i18nData = {
 
     // App Asian Names
     an_title: "Asian Name Generator",
-    an_desc: "Authentic names and scripts for novel characters and avatars.",
+    an_desc: "Authentic names and characters for fiction, novels, and avatars.",
     an_culture: "Culture",
     an_archetype: "Archetype",
     an_count: "Quantity",
@@ -93,9 +101,15 @@ const i18nData = {
     an_kr: "Korean (Hangul)",
     an_cn: "Chinese (Wuxia / Cultivation)",
     an_in: "Hindi (Vedic)",
+    an_vn: "Vietnamese (Hán)",
+    an_th: "Thai",
     an_all: "All",
     an_male: "Male",
     an_female: "Female",
+    an_fantasy: "Fantasy / Sovereign",
+    an_mode_random: "Catalogue Mode",
+    an_mode_custom: "Combinator Mode",
+    an_mode_desc: "100% client-side zero-token generation.",
 
     // Reading Speed
     rs_title: "Reading Speed Calculator",
@@ -207,4 +221,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const themeBtn = document.getElementById('themeToggle');
   if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+
+  // Manejo de dropdown de herramientas si existe
+  const navToolsBtn = document.getElementById('toolsMenuBtn');
+  const navToolsDropdown = document.getElementById('toolsDropdown');
+  if (navToolsBtn && navToolsDropdown) {
+    navToolsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navToolsDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', () => {
+      navToolsDropdown.classList.remove('open');
+    });
+  }
 });
