@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-neutral-950 text-neutral-100 antialiased">
+<html lang="es" class="h-full bg-[#030304] text-[#EDEDED] antialiased">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,16 +10,44 @@
   <meta property="og:description" content="Mini-apps gratuitas para lectores de novelas asiáticas y creadores de contenido.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://tools.dakesu.net/">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            serif: ['Cinzel', 'Georgia', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
           colors: {
-            brand: {
-              500: '#3E5CA4',
-              600: '#2E4378',
-              accent: '#E63946'
+            canvas: '#030304',
+            surface: {
+              1: '#0B0C0E',
+              2: '#111317',
+              3: '#181B20',
+            },
+            hairline: {
+              subtle: 'rgba(255, 255, 255, 0.07)',
+              strong: 'rgba(255, 255, 255, 0.15)',
+            },
+            ink: {
+              primary: '#EDEDED',
+              secondary: '#A1A7B4',
+              muted: '#636A79',
+            },
+            jade: {
+              500: '#10B981',
+              400: '#34D399',
+              dim: 'rgba(16, 185, 129, 0.12)',
+            },
+            crimson: {
+              500: '#E11D48',
+              dim: 'rgba(225, 29, 72, 0.12)',
             }
           }
         }
@@ -27,39 +55,67 @@
     }
   </script>
   <style>
+    /* Cuadrícula técnica de fondo con desvanecimiento radial central estricto */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(circle at 50% 20%, transparent 10%, black 85%);
+      -webkit-mask-image: radial-gradient(circle at 50% 20%, transparent 10%, black 85%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Control Pill Canónico SeiqOS */
     .control-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
+      gap: 4px;
+      padding: 3px 8px;
       border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(8px);
-      font-family: monospace;
+      background: rgba(17, 19, 23, 0.7);
+      backdrop-filter: blur(12px);
+      font-family: "JetBrains Mono", monospace;
       font-size: 11px;
     }
     .pill-btn {
-      color: rgba(255, 255, 255, 0.7);
+      color: #A1A7B4;
       background: transparent;
       border: none;
       cursor: pointer;
       padding: 0 4px;
-      font-weight: 600;
+      font-weight: 500;
+      transition: color 0.15s ease;
     }
-    .pill-btn:hover { color: #fff; }
+    .pill-btn:hover { color: #EDEDED; }
+
+    /* Bento Card Precision Layer */
+    .bento-card {
+      background: linear-gradient(180deg, rgba(17, 19, 23, 0.75) 0%, rgba(11, 12, 14, 0.95) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    .bento-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
   </style>
 </head>
-<body class="min-h-full flex flex-col font-sans selection:bg-brand-500 selection:text-white">
+<body class="min-h-full flex flex-col font-sans selection:bg-jade-500 selection:text-black relative">
 
-  <!-- Top Bar Canónica Dakesu -->
-  <header class="border-b border-neutral-800/80 bg-neutral-900/60 backdrop-blur sticky top-0 z-50">
+  <!-- Header Canónico de Precisión -->
+  <header class="border-b border-hairline-subtle bg-canvas/80 backdrop-blur-md sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <a href="https://dakesu.net" class="flex items-center gap-2 text-white font-bold tracking-tight text-lg hover:text-neutral-300 transition-colors">
-          <span class="w-7 h-7 bg-brand-500 text-white flex items-center justify-center text-xs font-mono font-black">D</span>
-          <span>Dakesu<span class="text-neutral-500 font-mono text-sm font-normal">.tools</span></span>
+        <a href="https://dakesu.net" class="flex items-center gap-2.5 text-ink-primary font-semibold tracking-tight text-base hover:text-white transition-colors">
+          <span class="w-6 h-6 border border-hairline-strong bg-surface-2 text-ink-primary flex items-center justify-center text-[11px] font-mono font-bold">D</span>
+          <span class="font-serif tracking-wider text-sm">DAKESU<span class="text-ink-muted font-mono text-xs font-normal">/tools</span></span>
         </a>
-        <span class="hidden sm:inline-block text-xs font-mono text-neutral-500 border border-neutral-800 px-2 py-0.5" data-i18n="site_tagline">SUITE CLIENT-SIDE</span>
+        <span class="hidden sm:inline-block text-[10px] font-mono text-ink-muted border border-hairline-subtle px-1.5 py-0.5" data-i18n="site_tagline">SUITE CLIENT-SIDE</span>
       </div>
 
       <div class="flex items-center gap-4">
@@ -70,173 +126,189 @@
           </button>
         </div>
 
-        <nav class="hidden md:flex items-center gap-4 text-xs font-medium border-l border-neutral-800 pl-4">
-          <a href="https://dakesu.net/novelas" class="text-neutral-400 hover:text-white transition-colors" data-i18n="nav_novels">Leer Novelas</a>
-          <a href="https://dakesu.net" class="text-neutral-400 hover:text-white transition-colors" data-i18n="nav_portal">Portal Principal</a>
+        <nav class="hidden md:flex items-center gap-5 text-xs font-medium border-l border-hairline-subtle pl-4">
+          <a href="https://dakesu.net/novelas" class="text-ink-secondary hover:text-ink-primary transition-colors" data-i18n="nav_novels">Leer Novelas</a>
+          <a href="https://dakesu.net" class="text-ink-secondary hover:text-ink-primary transition-colors" data-i18n="nav_portal">Portal Principal</a>
         </nav>
       </div>
     </div>
   </header>
 
-  <!-- Hero Directo Sin Slop -->
-  <main class="flex-1 max-w-6xl mx-auto px-4 py-12 w-full">
-    <div class="max-w-2xl mb-12">
-      <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-3" data-i18n="hero_title">
-        Utilidades para Lectores y Autores de Fantasía Asiática
+  <!-- Hero Editorial: Escala Tipográfica Intencional -->
+  <main class="flex-1 max-w-6xl mx-auto px-4 py-16 w-full relative z-10">
+    <div class="max-w-3xl mb-16">
+      <div class="inline-flex items-center gap-2 mb-4">
+        <span class="w-1.5 h-1.5 bg-jade-500"></span>
+        <span class="text-[11px] font-mono uppercase tracking-widest text-jade-400 font-semibold">Gabinete de Utilidades Taoístas & Asiáticas</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-serif font-bold tracking-tight text-white mb-4 leading-[1.15]" data-i18n="hero_title">
+        Utilidades de Precisión para el Lector & Autor Oriental
       </h1>
-      <p class="text-neutral-400 text-sm sm:text-base leading-relaxed" data-i18n="hero_desc">
-        Herramientas 100% privadas ejecutadas en tu navegador. Cero registros obligatorios, cero cookies de rastreo y exportación directa en un clic.
+      <p class="text-ink-secondary text-sm sm:text-base leading-relaxed max-w-2xl font-normal" data-i18n="hero_desc">
+        Cómputo 100% privado en el navegador. Cero formularios de registro, cero muros de pago y exportación inmediata al portapapeles.
       </p>
     </div>
 
-    <!-- Catálogo de 6 Mini-Apps -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Bento Grid Asimétrico: Ritmo Estricto de 4/8pt -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
       
-      <!-- App 1: Generador de Nombres -->
-      <a href="/asian-names" class="group block border border-neutral-800 bg-neutral-900/40 p-6 hover:border-neutral-700 hover:bg-neutral-900 transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <span class="text-xs font-mono text-brand-500 bg-brand-500/10 px-2 py-0.5" data-i18n="type_generator">GENERADOR</span>
-          <span class="text-xs font-mono text-neutral-500">v1.0</span>
+      <!-- Card 1: Generador de Nombres (Feature Hero) -->
+      <a href="/asian-names" class="bento-card p-6 flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-jade-400 bg-jade-dim px-2 py-0.5 border border-jade-500/20" data-i18n="type_generator">GENERADOR</span>
+            <span class="text-[11px] font-mono text-ink-muted">01</span>
+          </div>
+          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool1_title">
+            Generador de Nombres Asiáticos
+          </h2>
+          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool1_desc">
+            Nombres en Kanji japonés con lectura furigana, Hangul coreano, Wuxia/Xianxia de cultivo taoísta y Devanagari con significado fonético exacto.
+          </p>
         </div>
-        <h2 class="text-lg font-medium text-white mb-2" data-i18n="tool1_title">
-          Generador de Nombres Asiáticos
-        </h2>
-        <p class="text-neutral-400 text-xs leading-relaxed mb-6" data-i18n="tool1_desc">
-          Nombres en Kanji japonés con lectura furigana, Hangul coreano, Wuxia/Xianxia de cultivo taoísta y Devanagari con significado fonético exacto.
-        </p>
-        <div class="flex items-center gap-2 text-xs font-mono text-neutral-300 group-hover:text-white">
+        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
           <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
       </a>
 
-      <!-- App 2: Estimador de Lectura -->
-      <a href="/reading-speed" class="group block border border-neutral-800 bg-neutral-900/40 p-6 hover:border-neutral-700 hover:bg-neutral-900 transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <span class="text-xs font-mono text-neutral-400 bg-neutral-800 px-2 py-0.5" data-i18n="type_utility">UTILIDAD</span>
-          <span class="text-xs font-mono text-neutral-500">v1.0</span>
+      <!-- Card 2: Calculadora de Lectura -->
+      <a href="/reading-speed" class="bento-card p-6 flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-ink-secondary bg-surface-3 px-2 py-0.5 border border-hairline-subtle" data-i18n="type_utility">UTILIDAD</span>
+            <span class="text-[11px] font-mono text-ink-muted">02</span>
+          </div>
+          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool2_title">
+            Calculadora de Ritmo de Lectura Wuxia
+          </h2>
+          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool2_desc">
+            Calcula días y horas para terminar novelas masivas de 2.000+ capítulos según tu velocidad WPM y tiempo diario disponible.
+          </p>
         </div>
-        <h2 class="text-lg font-medium text-white mb-2" data-i18n="tool2_title">
-          Calculadora de Ritmo de Lectura Wuxia
-        </h2>
-        <p class="text-neutral-400 text-xs leading-relaxed mb-6" data-i18n="tool2_desc">
-          Calcula días y horas para terminar novelas masivas de 2.000+ capítulos según tu velocidad WPM y tiempo diario disponible.
-        </p>
-        <div class="flex items-center gap-2 text-xs font-mono text-neutral-300 group-hover:text-white">
+        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
           <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
       </a>
 
-      <!-- App 3: Glosario de Reinos de Cultivo -->
-      <a href="/cultivation-realms" class="group block border border-neutral-800 bg-neutral-900/40 p-6 hover:border-neutral-700 hover:bg-neutral-900 transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <span class="text-xs font-mono text-neutral-400 bg-neutral-800 px-2 py-0.5" data-i18n="type_reference">REFERENCIA</span>
-          <span class="text-xs font-mono text-neutral-500">v1.0</span>
+      <!-- Card 3: Reinos de Cultivo -->
+      <a href="/cultivation-realms" class="bento-card p-6 flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-ink-secondary bg-surface-3 px-2 py-0.5 border border-hairline-subtle" data-i18n="type_reference">REFERENCIA</span>
+            <span class="text-[11px] font-mono text-ink-muted">03</span>
+          </div>
+          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool3_title">
+            Glosario y Reinos de Cultivo Xianxia
+          </h2>
+          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool3_desc">
+            Tabla comparativa canónica: Condensación de Qi, Establecimiento de Fundación, Núcleo Dorado, Alma Naciente y Ascensión Celestial.
+          </p>
         </div>
-        <h2 class="text-lg font-medium text-white mb-2" data-i18n="tool3_title">
-          Glosario y Reinos de Cultivo Xianxia
-        </h2>
-        <p class="text-neutral-400 text-xs leading-relaxed mb-6" data-i18n="tool3_desc">
-          Tabla comparativa canónica: Condensación de Qi, Establecimiento de Fundación, Núcleo Dorado, Alma Naciente y Ascensión Celestial.
-        </p>
-        <div class="flex items-center gap-2 text-xs font-mono text-neutral-300 group-hover:text-white">
+        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
           <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
       </a>
 
-      <!-- App 4: Diccionario de Términos Daoístas -->
-      <a href="/daoist-glossary" class="group block border border-neutral-800 bg-neutral-900/40 p-6 hover:border-neutral-700 hover:bg-neutral-900 transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <span class="text-xs font-mono text-neutral-400 bg-neutral-800 px-2 py-0.5" data-i18n="type_reference">REFERENCIA</span>
-          <span class="text-xs font-mono text-neutral-500">v1.0</span>
+      <!-- Card 4: Diccionario Daoísta -->
+      <a href="/daoist-glossary" class="bento-card p-6 flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-ink-secondary bg-surface-3 px-2 py-0.5 border border-hairline-subtle" data-i18n="type_reference">REFERENCIA</span>
+            <span class="text-[11px] font-mono text-ink-muted">04</span>
+          </div>
+          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool4_title">
+            Diccionario de Términos Daoístas y Marciales
+          </h2>
+          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool4_desc">
+            Guía rápida de conceptos intraducibles: Dao, Dantian, Tribulación Celestial, Cara (Mianzi) y Píldoras Espirituales con pronunciación Pinyin.
+          </p>
         </div>
-        <h2 class="text-lg font-medium text-white mb-2" data-i18n="tool4_title">
-          Diccionario de Términos Daoístas y Marciales
-        </h2>
-        <p class="text-neutral-400 text-xs leading-relaxed mb-6" data-i18n="tool4_desc">
-          Guía rápida de conceptos intraducibles: Dao, Dantian, Tribulación Celestial, Cara (Mianzi) y Píldoras Espirituales con pronunciación Pinyin.
-        </p>
-        <div class="flex items-center gap-2 text-xs font-mono text-neutral-300 group-hover:text-white">
+        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
           <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
       </a>
 
-      <!-- App 5: Conversor de Monedas -->
-      <a href="/currency-converter" class="group block border border-neutral-800 bg-neutral-900/40 p-6 hover:border-neutral-700 hover:bg-neutral-900 transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <span class="text-xs font-mono text-neutral-400 bg-neutral-800 px-2 py-0.5" data-i18n="type_utility">UTILIDAD</span>
-          <span class="text-xs font-mono text-neutral-500">v1.0</span>
+      <!-- Card 5: Conversor de Monedas -->
+      <a href="/currency-converter" class="bento-card p-6 flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-ink-secondary bg-surface-3 px-2 py-0.5 border border-hairline-subtle" data-i18n="type_utility">UTILIDAD</span>
+            <span class="text-[11px] font-mono text-ink-muted">05</span>
+          </div>
+          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool5_title">
+            Conversor de Monedas de Novelas Fantásticas
+          </h2>
+          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool5_desc">
+            Convierte entre Monedas de Cobre, Lingotes de Plata, Oro y Piedras de Espíritu (Bajo, Medio y Alto Grado).
+          </p>
         </div>
-        <h2 class="text-lg font-medium text-white mb-2" data-i18n="tool5_title">
-          Conversor de Monedas de Novelas Fantásticas
-        </h2>
-        <p class="text-neutral-400 text-xs leading-relaxed mb-6" data-i18n="tool5_desc">
-          Convierte entre Monedas de Cobre, Lingotes de Plata, Oro y Piedras de Espíritu (Bajo, Medio y Alto Grado).
-        </p>
-        <div class="flex items-center gap-2 text-xs font-mono text-neutral-300 group-hover:text-white">
+        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
           <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
       </a>
 
-      <!-- App 6: Generador de Sectas -->
-      <a href="/sect-generator" class="group block border border-neutral-800 bg-neutral-900/40 p-6 hover:border-neutral-700 hover:bg-neutral-900 transition-all">
-        <div class="flex items-center justify-between mb-4">
-          <span class="text-xs font-mono text-brand-500 bg-brand-500/10 px-2 py-0.5" data-i18n="type_generator">GENERADOR</span>
-          <span class="text-xs font-mono text-neutral-500">v1.0</span>
+      <!-- Card 6: Generador de Sectas -->
+      <a href="/sect-generator" class="bento-card p-6 flex flex-col justify-between group">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-[10px] font-mono text-jade-400 bg-jade-dim px-2 py-0.5 border border-jade-500/20" data-i18n="type_generator">GENERADOR</span>
+            <span class="text-[11px] font-mono text-ink-muted">06</span>
+          </div>
+          <h2 class="text-lg font-medium text-white mb-2 group-hover:text-jade-400 transition-colors" data-i18n="tool6_title">
+            Generador de Sectas y Clanes Antiguos
+          </h2>
+          <p class="text-ink-secondary text-xs leading-relaxed mb-6 font-normal" data-i18n="tool6_desc">
+            Nombres para sectas ortodoxas, demoníacas, pabellones mercantiles y clanes ermitaños con lemas y elementos marciales.
+          </p>
         </div>
-        <h2 class="text-lg font-medium text-white mb-2" data-i18n="tool6_title">
-          Generador de Sectas y Clanes Antiguos
-        </h2>
-        <p class="text-neutral-400 text-xs leading-relaxed mb-6" data-i18n="tool6_desc">
-          Nombres para sectas ortodoxas, demoníacas, pabellones mercantiles y clanes ermitaños con lemas y elementos marciales.
-        </p>
-        <div class="flex items-center gap-2 text-xs font-mono text-neutral-300 group-hover:text-white">
+        <div class="pt-4 border-t border-hairline-subtle flex items-center justify-between text-xs font-mono text-ink-muted group-hover:text-ink-primary transition-colors">
           <span data-i18n="open_tool">Abrir herramienta</span>
-          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
         </div>
       </a>
 
     </div>
 
-    <!-- Banner Orgánico Casa: Redirección a Dakesu.net -->
-    <div class="mt-16 border border-neutral-800 bg-neutral-900/30 p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-      <div>
-        <span class="text-xs font-mono text-neutral-500 uppercase tracking-wider block mb-1" data-i18n="banner_tag">BIBLIOTECA OFICIAL</span>
-        <h3 class="text-xl font-medium text-white mb-2" data-i18n="banner_title">¿Buscas algo nuevo que leer?</h3>
-        <p class="text-neutral-400 text-xs max-w-xl" data-i18n="banner_desc">
+    <!-- Banner Editorial de Tráfico Casa (Estilo Monocle / Linear) -->
+    <div class="mt-20 border border-hairline-subtle bg-surface-1 p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center justify-between gap-8">
+      <div class="max-w-xl">
+        <span class="text-[10px] font-mono text-jade-400 uppercase tracking-widest block mb-2" data-i18n="banner_tag">BIBLIOTECA OFICIAL</span>
+        <h3 class="text-xl sm:text-2xl font-serif font-bold text-white mb-2" data-i18n="banner_title">¿Buscas algo nuevo que leer?</h3>
+        <p class="text-ink-secondary text-xs sm:text-sm leading-relaxed font-normal" data-i18n="banner_desc">
           Explora más de 50 novelas ligeras y webnovels asiáticas traducidas con formato limpio y lectura inmersiva sin publicidad invasiva.
         </p>
       </div>
-      <a href="https://dakesu.net" class="inline-flex items-center justify-center bg-brand-500 hover:bg-brand-600 text-white text-xs font-medium px-5 py-3 transition-colors shrink-0" data-i18n="banner_btn">
+      <a href="https://dakesu.net" class="inline-flex items-center justify-center bg-white text-black hover:bg-neutral-200 active:scale-[0.98] text-xs font-semibold px-6 py-3.5 transition-all shrink-0 font-mono tracking-tight" data-i18n="banner_btn">
         Ir a Dakesu.net
       </a>
     </div>
 
   </main>
 
-  <!-- Footer Sobrio -->
-  <footer class="border-t border-neutral-900 py-8 bg-neutral-950 text-neutral-500 text-xs">
+  <!-- Footer Sobrio y Técnico -->
+  <footer class="border-t border-hairline-subtle py-8 bg-canvas text-ink-muted text-xs relative z-10">
     <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
       <p data-i18n="footer_copy">&copy; 2026 Dakesu. Herramientas de código abierto ejecutadas en el cliente.</p>
-      <div class="flex items-center gap-6 font-mono">
-        <a href="https://dakesu.net" class="hover:text-neutral-300 transition-colors">dakesu.net</a>
-        <a href="https://seicka.net" class="hover:text-neutral-300 transition-colors">seicka.net</a>
+      <div class="flex items-center gap-6 font-mono text-[11px]">
+        <a href="https://dakesu.net" class="hover:text-ink-primary transition-colors">dakesu.net</a>
+        <a href="https://seicka.net" class="hover:text-ink-primary transition-colors">seicka.net</a>
       </div>
     </div>
   </footer>
