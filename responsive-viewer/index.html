@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SeiQOS — Multi-Device Responsive Inspector & Client Showcase</title>
+  <style>
+    :root {
+      --bg-dark: #0b0f17;
+      --panel-bg: #111827;
+      --border-color: #1f2937;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top Control Bar */
+    header {
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-badge {
+      background: rgba(37, 99, 235, 0.2);
+      color: #60a5fa;
+      padding: 2px 6px;
+      font-size: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    /* Mode Switcher Tabs */
+    .mode-tabs {
+      display: flex;
+      background: #030712;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.15s;
+    }
+
+    .tab-btn.active {
+      background: #1f2937;
+      color: #fff;
+    }
+
+    .url-form {
+      display: flex;
+      flex: 1;
+      max-width: 520px;
+      gap: 6px;
+    }
+
+    .url-input {
+      flex: 1;
+      background: #030712;
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-family: monospace;
+      outline: none;
+      border-radius: 4px;
+      transition: border-color 0.15s;
+    }
+
+    .url-input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: #1f2937;
+      color: var(--text-muted);
+    }
+
+    .btn-secondary:hover {
+      background: #374151;
+      color: #fff;
+    }
+
+    .btn-share {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+
+    .btn-share:hover {
+      background: rgba(16, 185, 129, 0.25);
+      color: #10b981;
+    }
+
+    /* Single Device Selector (Only visible in Single Mode) */
+    .single-selector {
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .device-select {
+      background: #030712;
+      border: 1px solid var(--border-color);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 11px;
+      outline: none;
+      font-family: monospace;
+      border-radius: 4px;
+    }
+
+    .quick-presets {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .preset-pill {
+      background: #030712;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-family: monospace;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .preset-pill:hover {
+      color: #fff;
+      border-color: #3b82f6;
+    }
+
+    /* Ruler Bar (For Single Mode) */
+    .ruler-bar {
+      display: none;
+      height: 20px;
+      background: #030712;
+      border-bottom: 1px solid var(--border-color);
+      color: #475569;
+      font-size: 9px;
+      font-family: monospace;
+      padding: 2px 10px;
+      overflow: hidden;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* Canvas Area with Checkerboard Background */
+    main {
+      flex: 1;
+      overflow: auto;
+      padding: 30px;
+      background-color: #0b0f17;
+      background-image: 
+        linear-gradient(45deg, #131926 25%, transparent 25%), 
+        linear-gradient(-45deg, #131926 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #131926 75%), 
+        linear-gradient(-45deg, transparent 75%, #131926 75%);
+      background-size: 24px 24px;
+      background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+      display: flex;
+      gap: 36px;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    main.single-mode {
+      justify-content: center;
+    }
+
+    /* Device Card Container */
+    .device-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .device-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .device-title {
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .device-dims {
+      color: var(--text-muted);
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .zoom-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #030712;
+      border: 1px solid var(--border-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .zoom-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 11px;
+      padding: 0 4px;
+    }
+
+    .zoom-btn:hover {
+      color: #fff;
+    }
+
+    .zoom-val {
+      font-size: 10px;
+      font-family: monospace;
+      color: #60a5fa;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    /* Frame Wrapper with Scaled Iframe */
+    .frame-wrapper {
+      background: #ffffff;
+      border: 2px solid #1f2937;
+      border-radius: 6px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+      transform-origin: top center;
+      transition: transform 0.15s ease-out;
+      overflow: hidden;
+      position: relative;
+    }
+
+    iframe {
+      border: none;
+      display: block;
+      background: #ffffff;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10b981;
+      color: #000;
+      padding: 10px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: monospace;
+      border-radius: 4px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <span>SeiQOS</span>
+      <span class="brand-badge">PRO SHOWCASE</span>
+    </div>
+
+    <div class="mode-tabs">
+      <button class="tab-btn active" id="tab-compare" onclick="switchMode('compare')">Grid 6 Dispositivos</button>
+      <button class="tab-btn" id="tab-single" onclick="switchMode('single')">Dispositivo Único</button>
+    </div>
+
+    <form id="url-form" class="url-form">
+      <input 
+        type="text" 
+        id="url-input" 
+        class="url-input" 
+        placeholder="https://..."
+      />
+      <button type="submit" class="btn">Cargar</button>
+      <button type="button" id="reload-btn" class="btn btn-secondary" title="Recargar todas las vistas">↻</button>
+    </form>
+
+    <div class="single-selector" id="single-selector">
+      <select id="device-dropdown" class="device-select" onchange="changeSingleDevice(this.value)">
+        <!-- Opciones inyectadas dinámicamente -->
+      </select>
+    </div>
+
+    <button type="button" class="btn btn-share" onclick="copyShareLink()">
+      <span>Compartir Demo</span>
+    </button>
+
+    <div class="quick-presets">
+      <button class="preset-pill" onclick="setTargetUrl('https://icono.ec/')">icono.ec</button>
+      <button class="preset-pill" onclick="setTargetUrl('http://localhost:4321/')">Local Astro</button>
+      <button class="preset-pill" onclick="setTargetUrl('http://localhost/conagopare/')">Local WP</button>
+    </div>
+  </header>
+
+  <div class="ruler-bar" id="ruler-bar">
+    | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 1000 | 1100 | 1200 | 1300 | 1400 | 1500 | 1600 | 1700 | 1800 | 1900 |
+  </div>
+
+  <main id="devices-container">
+    <!-- Renderizado dinámicamente -->
+  </main>
+
+  <div class="toast" id="toast">Enlace de demo copiado al portapapeles</div>
+
+  <script>
+    // Matriz Canónica de los 6 Viewports Clave
+    const canonicalDevices = [
+      {
+        id: 'mob-port',
+        name: 'Móvil Vertical',
+        category: 'mobile',
+        width: 390,
+        height: 844,
+        zoom: 0.85,
+        desc: 'Lienzo base smartphones (iPhone / Android)'
+      },
+      {
+        id: 'mob-land',
+        name: 'Móvil Horizontal',
+        category: 'mobile',
+        width: 844,
+        height: 390,
+        zoom: 0.75,
+        desc: 'Monitoreo colapso de cabeceras sticky'
+      },
+      {
+        id: 'tab-port',
+        name: 'Tablet Vertical',
+        category: 'tablet',
+        width: 768,
+        height: 1024,
+        zoom: 0.65,
+        desc: 'Breakpoint md: estándar iPad'
+      },
+      {
+        id: 'tab-land',
+        name: 'Tablet Horizontal',
+        category: 'tablet',
+        width: 1024,
+        height: 768,
+        zoom: 0.55,
+        desc: 'Comprobación de rejillas antes de desktop'
+      },
+      {
+        id: 'pc-base',
+        name: 'Laptop Estándar',
+        category: 'desktop',
+        width: 1366,
+        height: 768,
+        zoom: 0.45,
+        desc: 'Mayor tasa de rotura visual comercial'
+      },
+      {
+        id: 'pc-full',
+        name: 'Monitor Full HD',
+        category: 'desktop',
+        width: 1920,
+        height: 1080,
+        zoom: 0.35,
+        desc: 'Lienzo estándar de PC principal 1080p'
+      }
+    ];
+
+    let currentMode = 'compare'; // 'compare' o 'single'
+    let singleDeviceIndex = 0; // Por defecto Móvil Vertical
+    let currentUrl = 'https://icono.ec/';
+
+    function initFromUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const urlParam = params.get('url');
+      const modeParam = params.get('mode');
+      const devIndexParam = params.get('dev');
+      const widthParam = params.get('width');
+      const heightParam = params.get('height');
+
+      if (urlParam) {
+        currentUrl = decodeURIComponent(urlParam);
+      }
+      document.getElementById('url-input').value = currentUrl;
+
+      // Llenar selector de dispositivos
+      const dropdown = document.getElementById('device-dropdown');
+      dropdown.innerHTML = '';
+      canonicalDevices.forEach((dev, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.innerText = `${dev.name} (${dev.width} × ${dev.height})`;
+        dropdown.appendChild(opt);
+      });
+
+      if (modeParam === 'single') {
+        currentMode = 'single';
+        if (devIndexParam !== null) {
+          singleDeviceIndex = parseInt(devIndexParam, 10);
+        } else if (widthParam && heightParam) {
+          const w = parseInt(widthParam, 10);
+          const h = parseInt(heightParam, 10);
+          const found = canonicalDevices.findIndex(d => d.width === w && d.height === h);
+          if (found !== -1) singleDeviceIndex = found;
+        }
+      } else {
+        currentMode = 'compare';
+      }
+
+      updateUIState();
+      render();
+    }
+
+    function updateUIState() {
+      const tabCompare = document.getElementById('tab-compare');
+      const tabSingle = document.getElementById('tab-single');
+      const singleSelector = document.getElementById('single-selector');
+      const rulerBar = document.getElementById('ruler-bar');
+      const container = document.getElementById('devices-container');
+
+      if (currentMode === 'compare') {
+        tabCompare.classList.add('active');
+        tabSingle.classList.remove('active');
+        singleSelector.style.display = 'none';
+        rulerBar.style.display = 'none';
+        container.classList.remove('single-mode');
+      } else {
+        tabCompare.classList.remove('active');
+        tabSingle.classList.add('active');
+        singleSelector.style.display = 'flex';
+        rulerBar.style.display = 'block';
+        container.classList.add('single-mode');
+        document.getElementById('device-dropdown').value = singleDeviceIndex;
+      }
+    }
+
+    function switchMode(mode) {
+      currentMode = mode;
+      updateUIState();
+      render();
+      updateBrowserHistory();
+    }
+
+    function changeSingleDevice(index) {
+      singleDeviceIndex = parseInt(index, 10);
+      render();
+      updateBrowserHistory();
+    }
+
+    function render() {
+      const container = document.getElementById('devices-container');
+      container.innerHTML = '';
+
+      const listToRender = currentMode === 'compare' 
+        ? canonicalDevices 
+        : [canonicalDevices[singleDeviceIndex]];
+
+      listToRender.forEach((dev, idx) => {
+        const col = document.createElement('div');
+        col.className = 'device-column';
+
+        const scaledWidth = dev.width * dev.zoom;
+        const scaledHeight = dev.height * dev.zoom;
+
+        col.innerHTML = `
+          <div class="device-header" style="width: ${scaledWidth}px;">
+            <div class="device-title">
+              <span>${dev.name}</span>
+              <span class="device-dims">${dev.width} × ${dev.height}</span>
+            </div>
+            <div class="zoom-controls">
+              <button class="zoom-btn" onclick="changeZoom(${idx}, -0.05)">-</button>
+              <span class="zoom-val" id="zoom-val-${idx}">${Math.round(dev.zoom * 100)}%</span>
+              <button class="zoom-btn" onclick="changeZoom(${idx}, 0.05)">+</button>
+            </div>
+          </div>
+          <div 
+            class="frame-wrapper" 
+            id="wrapper-${idx}"
+            style="width: ${scaledWidth}px; height: ${scaledHeight}px;"
+          >
+            <iframe 
+              id="frame-${idx}"
+              src="${currentUrl}"
+              style="width: ${dev.width}px; height: ${dev.height}px; transform: scale(${dev.zoom}); transform-origin: 0 0;"
+              loading="lazy"
+            ></iframe>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    }
+
+    function changeZoom(idx, delta) {
+      const list = currentMode === 'compare' 
+        ? canonicalDevices 
+        : [canonicalDevices[singleDeviceIndex]];
+
+      const dev = list[idx];
+      dev.zoom = Math.max(0.2, Math.min(1.5, dev.zoom + delta));
+
+      const scaledWidth = dev.width * dev.zoom;
+      const scaledHeight = dev.height * dev.zoom;
+
+      const wrapper = document.getElementById(`wrapper-${idx}`);
+      const frame = document.getElementById(`frame-${idx}`);
+      const zoomVal = document.getElementById(`zoom-val-${idx}`);
+      const header = wrapper.previousElementSibling;
+
+      if (wrapper && frame && zoomVal && header) {
+        header.style.width = `${scaledWidth}px`;
+        wrapper.style.width = `${scaledWidth}px`;
+        wrapper.style.height = `${scaledHeight}px`;
+        frame.style.transform = `scale(${dev.zoom})`;
+        zoomVal.innerText = `${Math.round(dev.zoom * 100)}%`;
+      }
+    }
+
+    function setTargetUrl(url) {
+      document.getElementById('url-input').value = url;
+      updateUrl(url);
+    }
+
+    function updateUrl(url) {
+      let finalUrl = url.trim();
+      if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
+        finalUrl = 'https://' + finalUrl;
+      }
+      currentUrl = finalUrl;
+      const frames = document.querySelectorAll('iframe');
+      frames.forEach(f => f.src = currentUrl);
+      updateBrowserHistory();
+    }
+
+    function updateBrowserHistory() {
+      const params = new URLSearchParams();
+      params.set('url', currentUrl);
+      params.set('mode', currentMode);
+      if (currentMode === 'single') {
+        const dev = canonicalDevices[singleDeviceIndex];
+        params.set('width', dev.width);
+        params.set('height', dev.height);
+        params.set('dev', singleDeviceIndex);
+      }
+      const newUrl = window.location.pathname + '?' + params.toString();
+      window.history.replaceState({}, '', newUrl);
+    }
+
+    function copyShareLink() {
+      const fullUrl = window.location.href;
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      });
+    }
+
+    document.getElementById('url-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      updateUrl(document.getElementById('url-input').value);
+    });
+
+    document.getElementById('reload-btn').addEventListener('click', () => {
+      const frames = document.querySelectorAll('iframe');
+      frames.forEach(f => {
+        const s = f.src;
+        f.src = '';
+        f.src = s;
+      });
+    });
+
+    // Iniciar
+    initFromUrlParams();
+  </script>
+</body>
+</html>
